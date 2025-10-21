@@ -1,9 +1,7 @@
 # StrongStart2025
 
-Jack
-eloy
-
-
-- danish
 - Federico
+- Jack
+- eloy
+- Danish
 - Jinwoo

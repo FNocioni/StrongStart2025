@@ -1,0 +1,15 @@
+{
+  "name": "sample_project",
+  "version": "1.0.0",
+  "description": "Sample project with nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "author": "Jinwoo, Eloy, Jack, Danish",
+  "license": "ISC",
+  "dependencies": {    
+    "express": "^4.17.1"    
+  }
+}
