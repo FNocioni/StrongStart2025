@@ -7,7 +7,7 @@
     "test": "test",
     "start": "node server.js"
   },
-  "author": "Federico Nocioni",
+  "author": "Jinwoo, Eloy, Jack, Danish",
   "license": "ISC",
   "dependencies": {    
     "express": "^4.17.1"    
