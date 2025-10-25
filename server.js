@@ -26,22 +26,22 @@ app.post('/login', async (req, res) => {
         const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
         if(rows.length == 0){
             return res.status(400).json({success: false, error: 'Username Does Not Exist'});
-        }      
+        }
 
         if(rows[0].password == password){
             return res.status(200).json({success: true, message: `Logged in as ${username}`});
         }
-        
-    } catch(err){        
-        return res.status(500).json({error: 'Database Connection Failed'});
-    } 
 
-    // res.sendFile(path.join(__dirname, 'public', 'login.html')); 
+    } catch(err){
+        return res.status(500).json({error: 'Database Connection Failed'});
+    }
+
+    // res.sendFile(path.join(__dirname, 'public', 'login.html'));
     // if (email === 'email@gmail.com' && password === 'password123') {
     //     res.json({ success: true, email });
     // } else {
     //     res.status(401).json({success: false, message: 'Invalid credentials' });
-    // } 
+    // }
 });
 
 app.post('/register', async (req, res) => {
@@ -54,16 +54,16 @@ app.post('/register', async (req, res) => {
         const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
         if(rows.length != 0){
             return res.status(400).json({success: false, error: 'Username Already Exists'});
-        }      
+        }
 
         //Create the record in the DB
         const [result] = await pool.query('INSERT INTO users (first_name, last_name, username, email, password) VALUES (?, ?, ?, ? ,?)',
             [firstName, lastName, username, email, password]);
-        
+
         return res.status(200).json({success: true, message: 'User Sucessfully Created'});
-    } catch(err){        
+    } catch(err){
         return res.status(500).json({error: 'Database Connection Failed'});
-    } 
+    }
 });
 
 

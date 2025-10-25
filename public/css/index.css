@@ -29,19 +29,19 @@ input {
 
 
 .background {
-    background-size: cover; 
-    display: flex; 
-    min-height: 80vh; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+    background-size: cover;
+    display: flex;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 footer {
     position: absolute;
     bottom: 0vh;
     width: 100%;
-    height: 10vh;  
+    height: 10vh;
 }
 
 .page-footer{

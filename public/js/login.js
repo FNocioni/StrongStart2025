@@ -11,12 +11,12 @@ loginForm.addEventListener('input', function() {
 });
 
 // Check if username & password combination exists
-async function login (){ 
+async function login (){
     const params = {
-        'username': username.value,        
+        'username': username.value,
         'password': password.value
     }
-    
+
     const response = await fetch(baseUrl + "login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,12 +25,12 @@ async function login (){
 
     const responseData = await response.json();
 
-    if(!response.ok){        
+    if(!response.ok){
         if(responseData.error == "Username Does Not Exist"){
             username.classList = ['invalid'];
             password.classList = ['invalid'];
         }
-        throw new Error("Response not OK");        
+        throw new Error("Response not OK");
     }else{
         alert(responseData.message);
         localStorage.setItem("user", username.value);

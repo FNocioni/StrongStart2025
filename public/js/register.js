@@ -19,7 +19,7 @@ registerForm.addEventListener('input', function() {
 });
 
 // Check if username & password combination exists
-async function register (){ 
+async function register (){
     const params = {
         'firstName': firstName.value,
         'lastName': lastName.value,
@@ -27,7 +27,7 @@ async function register (){
         'email': email.value,
         'password': password.value
     }
-    
+
     const response = await fetch(baseUrl + "register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,11 +36,11 @@ async function register (){
 
     const responseData = await response.json();
 
-    if(!response.ok){        
+    if(!response.ok){
         if(responseData.error == "Username Already Exists"){
             username.classList = ["invalid"]
         }
-        throw new Error("Response not OK");        
+        throw new Error("Response not OK");
     }else{
         alert(responseData.message);
         window.location.href = '/login.html';
@@ -73,7 +73,7 @@ function validateEmail(){
         email.classList = ["invalid"];
         return false;
     }
-    
+
     email.classList = ["valid"];
     return true;
 }
