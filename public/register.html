@@ -8,7 +8,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="css/login.css">
+        <link type="text/css" rel="stylesheet" href="css/register.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
         <!--Let browser know website is optimized for mobile-->
@@ -18,25 +18,43 @@
     <body class="background" background="images/background.png">
 
         <div class="login">
-            <div class="col s12" id="login_form">
-                <img src="images/logo.png" width="300" height="300" style="display: block; margin-left: auto; margin-right: auto;">               
+            <div class="col s12" id="register_form">
+                <img src="images/logo.png" width="300" height="300" style="display: block; margin-left: auto; margin-right: auto;">
+                <div class="row">
+                    <div class="input-field col s6" style="color: rgb(165, 165, 165);">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="username" type="text">
                         <label for="username">Username</label>                        
-                        <span class="helper-text" data-error="Incorrect Username/Password">Helper text</span>
+                        <span class="helper-text" data-error="Username already exists">Helper text</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="email">
+                        <label for="email">Email</label>
+                        <span class="helper-text" data-error="Please enter a valid e-mail address">Helper text</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="password" type="password">
                         <label for="password">Password</label>
-                        <span class="helper-text" data-error="Incorrect Username/Password">Helper text</span>
+                        <span class="helper-text" data-error="Password must be at-least 8 characters">Helper text</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s6 offset-s3" style="justify-content: center; display: flex;">
-                        <button class="btn waves-effect waves-light" id="submit_button" type="submit" onclick=login() disabled="true">Submit
+                        <button class="btn waves-effect waves-light" id="submit_button" type="submit" onclick=register() disabled="true">Register
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
@@ -46,7 +64,7 @@
 
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="js/materialize.js"></script>
-        <script type="text/javascript" src="js/login.js"></script>
+        <script type="text/javascript" src="js/register.js"></script>
 
     </body>
 
