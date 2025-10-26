@@ -14,6 +14,7 @@
 - [Authors](#authors)
 - [Sections](#sections)
 - [Preview and screenshots](#preview)
+- [Technical details](#technical-details)
 - [Installation and running server on localhost](#running-server-on-localhost)
 
 ## Preview
@@ -21,6 +22,33 @@
 ![loginPage](md/loginPage.png)
 
 ![aboutPage](md/aboutPage.png)
+
+## Technical details
+
+**Technologies used**
+- languages
+    - javaScript
+    - html
+    - css
+- toolchain
+    - node
+    - npm
+        - dotenv
+        - express-js
+        - mysql2
+        - chai
+        - jest
+        - jest-environment-jsdom
+    - bash
+        - <scripts/clearTrailingSpaces.bash>
+        - <cripts/mariadbCLI.bash>
+    - mariadb-clients
+    - SQL (AWS mysql2 server)
+- source control
+    - git
+    - github
+
+**Backend/Frontend structure**
 
 ## Running server on localhost
 
