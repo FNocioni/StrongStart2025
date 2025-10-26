@@ -50,6 +50,8 @@
 
 **Backend/Frontend structure**
 
+![backendFrontendStructure](md/backendFrontendStructure.jpg)
+
 ## Running server on localhost
 
 1. Make sure you have `node` and `npm` installed on your machine
