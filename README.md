@@ -1,11 +1,26 @@
 # StrongStart2025
 
+> A spending tracker application for CS100 StrongStart2025 project
+
+## Sections
+- [Top of page](#strongstart2025)
+- [Sections](#sections)
+- [Authors](#authors)
+- [Preview and screenshots](#preview)
+- [Installation and running server on localhost](#running-server-on-localhost)
+
 ## Authors
 - Federico (Mentor)
 - Jack
 - eloy
 - Danish
 - Jinwoo
+
+# Preview
+
+![loginPage](md/loginPage.png)
+
+![aboutPage](md/aboutPage.png)
 
 # Running server on localhost
 
