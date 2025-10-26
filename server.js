@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('./db');
 const path = require('path');
+const argon2 = require('argon2');
 const app = express();
 const port = 5000;
 app.use(express.json())
@@ -14,7 +15,6 @@ app.get('/', async (req, res) => {
     console.log("Sending to Registration");
     return res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
-
 
 app.post('/login', async (req, res) => {
     console.log("Received POST Request (login)");
@@ -42,6 +42,8 @@ app.post('/login', async (req, res) => {
     // } else {
     //     res.status(401).json({success: false, message: 'Invalid credentials' });
     // }
+
+	return res.status(400).json({sucess: false, error: 'INCORRECT username OR password!'});
 });
 
 app.post('/register', async (req, res) => {
@@ -65,7 +67,6 @@ app.post('/register', async (req, res) => {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 });
-
 
 app.listen(port, '::', async () => {
     console.log(`✅ Server running at http://localhost:${port}`);
