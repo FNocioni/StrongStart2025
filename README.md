@@ -41,7 +41,7 @@
         - jest-environment-jsdom
     - bash
         - [clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
-        - [mariadbCLI.bash](./cripts/mariadbCLI.bash)
+        - [mariadbCLI.bash](./scripts/mariadbCLI.bash)
     - mariadb-clients
     - SQL (AWS mysql2 server)
 - source control
