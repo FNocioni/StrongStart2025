@@ -16,13 +16,13 @@
 - [Preview and screenshots](#preview)
 - [Installation and running server on localhost](#running-server-on-localhost)
 
-# Preview
+## Preview
 
 ![loginPage](md/loginPage.png)
 
 ![aboutPage](md/aboutPage.png)
 
-# Running server on localhost
+## Running server on localhost
 
 1. Make sure you have `node` and `npm` installed on your machine
 
