@@ -1,0 +1,46 @@
+.background {
+    background-size: cover;
+    display: flex;
+    min-height: 80vh;
+    display: flex;
+    /* align-items: center;  */
+    justify-content: center;
+}
+
+.about {
+	background-color: white;
+	padding: 50px;
+	border-radius: 15px;
+
+	background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+	background-size: 300% 100%; /* Make the gradient wider than the element */
+	animation: gradient-shift 10s linear infinite alternate; /* Animate the background position */
+}
+
+@keyframes gradient-shift {
+	0% {
+		background-position: 0% 50%; /* Start at the left */
+	}
+	100% {
+		background-position: 100% 50%; /* Shift to the right */
+	}
+}
+
+h1 {
+	text-align: center;
+}
+
+.paragraph {
+	max-width: 40vw;
+	max-height: 75vh;
+	overflow-y: auto;
+
+	border: 3px solid;
+	border-color: red;
+
+	padding: 10px;
+}
+
+p {
+	color: black;
+}
