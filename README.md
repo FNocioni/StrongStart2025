@@ -58,7 +58,19 @@
 
     On arch-linux based distros:
     ```shell
-    sudo pacman -S nodejs npm
+    sudo pacman -Syu nodejs npm
+    ```
+
+
+    On debian-linux based distros:
+    ```shell
+    sudo apt update && sudo apt install nodejs npm
+    ```
+
+
+    On linux systems with the dnf package manager:
+    ```shell
+    sudo dnf upgrade --refresh && sudo dnf install nodejs nodejs-npm
     ```
 
 
