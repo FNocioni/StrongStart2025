@@ -6,6 +6,7 @@ var email = document.getElementById("email");
 var password = document.getElementById("password");
 var submitButton = document.getElementById("submit_button");
 
+
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 var baseUrl = "http://localhost:5000/"
@@ -23,7 +24,8 @@ async function login (){
         'firstName': firstName.value,
         'lastName': lastName.value,
         'email': email.value,
-        'password': password.value
+        'password': password.value,
+        'personalQuestion': personalQuestion,
     }
     
 
