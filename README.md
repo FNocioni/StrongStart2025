@@ -16,6 +16,9 @@
 - [Preview and screenshots](#preview)
 - [Technical details](#technical-details)
 - [Installation and running server on localhost](#running-server-on-localhost)
+- [Scripts](#scripts)
+    - [clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
+    - [mariadbCLI.bash](./scripts/mariadbCLI.bash)
 
 ## Preview
 
@@ -140,3 +143,59 @@
 
 
     On any other OS, open a Modern web-browser and go to the url: <http://localhost:5000>
+
+## Scripts
+[clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
+
+This script is meant to be run in a linux environment
+
+> Clear trailing spaces and tabs in passed file
+
+If in project root, you run:
+```shell
+./scripts/clearTrailingSpaces.bash fileContainingTrailingSpacesGoesHere.cpp
+```
+
+An example file initally looking like:
+![beforeClearingTrailingSpaces](md/beforeClearingTrailingSpaces.png)
+
+
+Will look like the following after the script is ran:
+![afterClearingTrailingSpaces](md/afterClearingTrailingSpaces.png)
+
+
+[mariadbCLI.bash](./scripts/mariadbCLI.bash)
+
+This script is meant to be run in a linux environment
+
+
+If you are on WindowsOS, use a GUI tool such as [MySql Workbench]("https://dev.mysql.com/downloads/workbench/") instead
+
+
+> Connect to MySql2 database with specified credentials in the project root ./.env file
+> 
+> Allows for fast logins to a MySql2 without having to type in credentials every single time
+
+
+Resolve dependencies before running script:
+```shell
+sudo pacman -Syu mariadb-clients
+```
+
+
+Assuming that your ./.env file is properly populated with the correct information in the following text format:
+```
+DB_HOST=database_host_url_goes_here
+DB_USER=database_login_username_goes_here
+DB_PASS=database_login_password_goes_here
+DB_PORT=database_port_goes_here
+DB_NAME=database_default_database_target
+```
+
+
+You can simply run the following command from the project root:
+```shell
+./scripts/mariadbCLI.bash
+```
+
+Which will connect you to the specified MySql2 database in the ./.env file

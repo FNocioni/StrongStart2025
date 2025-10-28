@@ -6,12 +6,14 @@ function ensureBinaryExists() {
 
 ensureBinaryExists sed
 
-if [ ! -f "$1" ]; then
-	echo "\"$1\" does not exist or is not a regular file!"
-	echo 'aborting!'
-	exit
-fi
+for i in "$@"; do
+	if [ ! -f "$i" ]; then
+		echo "Skipping \"$i\"!  --> \"$i\" does not exist or is not a regular file!"
+		continue;
+	fi
 
-echo "linting \"$1\" ..."
-sed -i 's/[\t ]\+$//' "$1"
+	echo "linting \"$i\" ..."
+	sed -i 's/[\t ]\+$//' "$i"
+done
+
 echo 'done!'
