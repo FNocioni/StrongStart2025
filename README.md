@@ -16,6 +16,9 @@
 - [Preview and screenshots](#preview)
 - [Technical details](#technical-details)
 - [Installation and running server on localhost](#running-server-on-localhost)
+- [Scripts](#scripts)
+    - [clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
+    - [mariadbCLI.bash](./scripts/mariadbCLI.bash)
 
 ## Preview
 
@@ -140,3 +143,101 @@
 
 
     On any other OS, open a Modern web-browser and go to the url: <http://localhost:5000>
+
+## Scripts
+[clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
+
+> Clear trailing spaces and tabs in passed file
+
+If in project root, you run:
+```shell
+./scripts/clearTrailingSpaces.bash fileContainingTrailingSpacesGoesHere.cpp
+```
+
+An example file initally looking like:
+```C++
+1   #include <SFML/Graphics.hpp>
+  1 
+  2 int main()
+  3 {
+  4    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1920, 1080)), "titles goes here");󰞙󰞙   󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
+  5    sf::CircleShape shape(100.f);
+  6    shape.setFillColor(sf::Color::Green);
+  7                                     
+  8    while(window.isOpen())
+  9    {󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
+ 10       while(std::optional<sf::Event> event = window.pollEvent())󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙      󰞙󰞙󰞙󰞙󰞙  󰞙     󰞙󰞙
+ 11       {     
+ 12          if(event->getIf<sf::Event::Closed>())󰞙󰞙󰞙   󰞙     󰞙  󰞙     󰞙  󰞙  󰞙  
+ 13          {
+ 14             window.close();󰞙󰞙󰞙󰞙󰞙
+ 15          }        
+ 16       }        
+ 17 󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
+ 18       window.clear();󰞙󰞙󰞙󰞙󰞙󰞙
+ 19       window.draw(shape);
+ 20       window.display();
+ 21    }
+ 22 
+ 23    return 0;󰞙󰞙
+ 24 }󰞙󰞙
+```
+
+Will look like the following after the script is ran:
+```C++
+1   #include <SFML/Graphics.hpp>
+  1 
+  2 int main()
+  3 {
+  4    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1920, 1080)), "titles goes here");
+  5    sf::CircleShape shape(100.f);
+  6    shape.setFillColor(sf::Color::Green);
+  7 
+  8    while(window.isOpen())
+  9    {
+ 10       while(std::optional<sf::Event> event = window.pollEvent())
+ 11       {
+ 12          if(event->getIf<sf::Event::Closed>())
+ 13          {
+ 14             window.close();
+ 15          }
+ 16       }
+ 17 
+ 18       window.clear();
+ 19       window.draw(shape);
+ 20       window.display();
+ 21    }
+ 22 
+ 23    return 0;
+ 24 }
+```
+
+[mariadbCLI.bash](./scripts/mariadbCLI.bash)
+
+> Connect to MySql2 database with specified credentials in the project root ./.env file
+> 
+> Allows for fast logins to a MySql2 without having to type in credentials every single time
+
+
+Resolve dependencies before running script:
+```shell
+sudo pacman -Syu mariadb-clients
+```
+
+
+Assuming that your ./.env file is properly populated with the correct information in the following text format:
+```
+DB_HOST=database_host_url_goes_here
+DB_USER=database_login_username_goes_here
+DB_PASS=database_login_password_goes_here
+DB_PORT=database_port_goes_here
+DB_NAME=database_default_database_target
+```
+
+
+You can simply run the following command from the project root:
+```shell
+./scripts/mariadbCLI.bash
+```
+
+Which will connect you to the specified MySql2 database in the ./.env file
