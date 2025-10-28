@@ -3,10 +3,10 @@ var loginForm = document.getElementById("login_form");
 var username = document.getElementById("username");
 var password = document.getElementById("password");
 var submitButton = document.getElementById("submit_button");
-
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
 var baseUrl = "http://localhost:5000/"
+
+
 
 loginForm.addEventListener('input', function() {
     submitButton.disabled = isSubmitDisabled();
@@ -32,10 +32,8 @@ async function stableSHA256(input) {
 async function login (){
 	const hashedPassword = await stableSHA256(password.value);
     const params = {
-        'firstName': firstName.value,
-        'lastName': lastName.value,
-        'email': email.value,
-        'password': password.value
+        'username': username.value,
+        'password': hashedPassword
     }
 
     const response = await fetch(baseUrl + "login", {

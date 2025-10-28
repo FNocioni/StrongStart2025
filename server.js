@@ -73,10 +73,10 @@ app.listen(port, '::', async () => {
 
     //Test DB Connectivity
     try{
-        const res = await pool.query('SHOW tables');
+        const result = await pool.query('SHOW tables');
         console.log("Connected to Database!");
     } catch(err){
         console.error("Database Error", err);
-        res.status(500).json({error: 'Database Connection Failed'});
+        //res.status(500).json({error: 'Database Connection Failed'});
     }
 });
