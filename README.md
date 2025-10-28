@@ -147,6 +147,8 @@
 ## Scripts
 [clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
 
+This script is meant to be run in a linux environment
+
 > Clear trailing spaces and tabs in passed file
 
 If in project root, you run:
@@ -155,64 +157,20 @@ If in project root, you run:
 ```
 
 An example file initally looking like:
-```C++
-1   #include <SFML/Graphics.hpp>
-  1 
-  2 int main()
-  3 {
-  4    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1920, 1080)), "titles goes here");󰞙󰞙   󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
-  5    sf::CircleShape shape(100.f);
-  6    shape.setFillColor(sf::Color::Green);
-  7                                     
-  8    while(window.isOpen())
-  9    {󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
- 10       while(std::optional<sf::Event> event = window.pollEvent())󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙      󰞙󰞙󰞙󰞙󰞙  󰞙     󰞙󰞙
- 11       {     
- 12          if(event->getIf<sf::Event::Closed>())󰞙󰞙󰞙   󰞙     󰞙  󰞙     󰞙  󰞙  󰞙  
- 13          {
- 14             window.close();󰞙󰞙󰞙󰞙󰞙
- 15          }        
- 16       }        
- 17 󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙󰞙
- 18       window.clear();󰞙󰞙󰞙󰞙󰞙󰞙
- 19       window.draw(shape);
- 20       window.display();
- 21    }
- 22 
- 23    return 0;󰞙󰞙
- 24 }󰞙󰞙
-```
+![beforeClearingTrailingSpaces](md/beforeClearingTrailingSpaces.png)
+
 
 Will look like the following after the script is ran:
-```C++
-1   #include <SFML/Graphics.hpp>
-  1 
-  2 int main()
-  3 {
-  4    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1920, 1080)), "titles goes here");
-  5    sf::CircleShape shape(100.f);
-  6    shape.setFillColor(sf::Color::Green);
-  7 
-  8    while(window.isOpen())
-  9    {
- 10       while(std::optional<sf::Event> event = window.pollEvent())
- 11       {
- 12          if(event->getIf<sf::Event::Closed>())
- 13          {
- 14             window.close();
- 15          }
- 16       }
- 17 
- 18       window.clear();
- 19       window.draw(shape);
- 20       window.display();
- 21    }
- 22 
- 23    return 0;
- 24 }
-```
+![afterClearingTrailingSpaces](md/afterClearingTrailingSpaces.png)
+
 
 [mariadbCLI.bash](./scripts/mariadbCLI.bash)
+
+This script is meant to be run in a linux environment
+
+
+If you are on WindowsOS, use a GUI tool such as [MySql Workbench]("https://dev.mysql.com/downloads/workbench/") instead
+
 
 > Connect to MySql2 database with specified credentials in the project root ./.env file
 > 
