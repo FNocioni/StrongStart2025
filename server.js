@@ -71,7 +71,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/transactions', async (req, res) => {
-    console.log("Received POST Request (register)");
+    console.log("Received POST Request (transactions)");
 
 	const { username } = req.body;
 

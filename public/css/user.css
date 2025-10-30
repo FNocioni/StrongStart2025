@@ -41,16 +41,31 @@ input[type=text]:not(.browser-default):focus:not([readonly]) + label {
 	font-size: 24px;
 }
 
-.spendingsInfo {
+#spendingsInfoDiv {
 	color: white;
 	max-width: 40vw;
 	max-height: 70vh;
 	overflow-y: auto;
 
 	border: 3px solid;
-	border-color: red;
+	border-color: rgba(50, 50, 50, 3);;
 
 	padding: 10px;
+}
+
+.transactionItem {
+	color: white;
+	background-color: gray;
+	border-radius: 15px;
+	padding: 10px;
+	line-height: 1;
+}
+
+.transactionItemRow {
+	display: flex;
+	justify-content: space-between;
+	padding: 0px;
+	margin: 0px;
 }
 
 .background {
