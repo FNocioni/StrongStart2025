@@ -4,7 +4,7 @@
     background-color: rgba(20, 20, 20, 90%);
     border: 5px solid rgb(187, 187, 187);
     border-radius: 10px;
-    padding: 100px;
+    padding: 130px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -27,6 +27,15 @@ input {
     font-size: 14pt !important;
 }
 
+.registerInstead {
+	background-color: rgb(90, 90, 90);
+	padding-left: 7px;
+	padding-right: 7px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	margin-bottom: -40px;
+	border-radius: 10px;
+}
 
 .background {
     background-size: cover;

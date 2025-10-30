@@ -15,6 +15,7 @@ function ensureBinaryExists() {
 ensureBinaryExists cat
 ensureBinaryExists grep
 ensureBinaryExists sed
+ensureBinaryExists mariadb
 
 if [ ! -f './.env' ]; then
 	echo 'file "./.env" not found!'
