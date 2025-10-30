@@ -36,6 +36,8 @@ app.post('/login', async (req, res) => {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 
+	return res.status(400).json({success: false, error: 'Invalid Credentials'});
+
     // res.sendFile(path.join(__dirname, 'public', 'login.html'));
     // if (email === 'email@gmail.com' && password === 'password123') {
     //     res.json({ success: true, email });
@@ -66,6 +68,23 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.post('/transactions', async (req, res) => {
+    console.log("Received POST Request (register)");
+
+	const { username } = req.body;
+
+    try{
+        //Check that the username is available
+        const [rows] = await pool.query('SELECT * FROM transactions WHERE username = ?', [username]);
+        if(rows.length === 0){
+            return res.status(400).json({success: false, error: 'User Has No Existing Transactions!'});
+        }
+
+        return res.status(200).json({success: true, message: 'User Transactions Successfully Fetched!', data: rows});
+    } catch(err){
+        return res.status(500).json({error: 'Database Connection Failed'});
+    }
+});
 
 app.listen(port, '::', async () => {
     console.log(`✅ Server running at http://localhost:${port}`);
