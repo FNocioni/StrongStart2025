@@ -2,6 +2,7 @@ const express = require('express');
 const pool = require('./db');
 const path = require('path');
 const argon2 = require('argon2');
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const app = express();
 const port = 5000;
 app.use(express.json())
@@ -86,6 +87,58 @@ app.post('/transactions', async (req, res) => {
     } catch(err){
         return res.status(500).json({error: 'Database Connection Failed'});
     }
+});
+
+app.get('/chart', async (req, res) => {
+	console.log("Received GET Request (chart)");
+
+	const today = new Date();
+	const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+	const monthShort = today.toLocaleString('en-US', { month: 'short' });
+	let daysInCurrentMonthAsStrings = [];
+	for(let x = 0; x < daysInCurrentMonth; x++) {
+		daysInCurrentMonthAsStrings.push(`${monthShort} ${x + 1}`)
+	}
+
+	const width = parseInt(req.query.width) || 800;
+	const height = parseInt(req.query.height) || 600;
+	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+
+	try {
+		const configuration = {
+			type: 'line',
+			data: {
+				labels: daysInCurrentMonthAsStrings,
+				datasets: [{
+					label: 'My First Dataset',
+					data: [65, 59, 80, 81, 56, 55, 40],
+					fill: false,
+					borderColor: 'rgb(75, 192, 192)',
+					tension: 0.1
+				}]
+			},
+			options: {
+				responsive: false,
+				plugins: {
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Server-Side Chart Example'
+					}
+				}
+			}
+		};
+
+		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+
+		res.set('Content-Type', 'image/png');
+		res.send(image);
+	} catch(err) {
+		console.error(err);
+		res.status(500).send('Error generating chart');
+	}
 });
 
 app.listen(port, '::', async () => {

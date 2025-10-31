@@ -65,7 +65,7 @@ async function getTransactions() {
 		innerHTMLStringBuffer += 	`</span>`;
 		innerHTMLStringBuffer += `</p>`;
 	}
-	console.log(totalSpendingsThisMonth);
+	localStorage.setItem("totalSpendingsThisMonth", totalSpendingsThisMonth);
 	spendingsInfoDiv.innerHTML = innerHTMLStringBuffer;
 
 	for(let x = 0; x < responseData.data.length; x++) {
