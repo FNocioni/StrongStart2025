@@ -60,8 +60,6 @@ async function login (){
     }
 }
 
-
-
 function isSubmitDisabled(){
     return (!username.value || !password.value);
 }
