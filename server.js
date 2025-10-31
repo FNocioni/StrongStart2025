@@ -209,15 +209,18 @@ app.get('/doughnut', async (req, res) => {
 	const username = req.query.username;
 
 	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-	const { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
+	const { Chart, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
 
 	Chart.register(
+		DoughnutController,
+		ArcElement,
 		LineController,
 		LineElement,
 		PointElement,
 		CategoryScale,
 		LinearScale,
 		Tooltip,
+		Legend,
 	);
 
 	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
@@ -229,30 +232,12 @@ app.get('/doughnut', async (req, res) => {
 				datasets: [{
 					label: 'Spendings This Month',
 					data: spendingsThisMonth,
-					/*
-					backgroundColor: [
-						'rgb(255, 99, 132)',
-						'rgb(54, 162, 235)',
-						'rgb(255, 205, 86)'
-					],
-					*/
-					//hoverOffset: 4
 				}]
 			},
 			options: {
 				plugins: {
-					datalabels: {
-						display: true,
-						align: 'top',
-						formatter: function(value) {
-							return value;
-						},
-						color: 'rgba(100, 100, 100, 50)',
-						font: {
-							weight: 'bold'
-						}
-					},
 					legend: {
+						display: true,
 						position: 'bottom'
 					},
 					title: {

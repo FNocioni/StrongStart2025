@@ -104,6 +104,24 @@ async function getTransactions(renderChart = false) {
 		chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Chart">`;
 	} else {
 		// render doughnut
+		let vendorsToSpendingsMap = {};
+		for(let x = 0; x < vendorsOfSpendingsThisMonth.length; x++) {
+			if(parseFloat(spendingsThisMonth[x]) >= 0) {
+				continue;
+			}
+			vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] = (vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] || 0.0) + parseFloat(spendingsThisMonth[x]);
+		}
+		console.log(vendorsToSpendingsMap);
+		vendorsOfSpendingsThisMonth = [];
+		spendingsThisMonth = [];
+		for(const key in vendorsToSpendingsMap) {
+			vendorsOfSpendingsThisMonth.push(key + '\n' + vendorsToSpendingsMap[key].toFixed(2));
+			spendingsThisMonth.push(String(vendorsToSpendingsMap[key]));
+		}
+
+		console.log(vendorsOfSpendingsThisMonth);
+		console.log(spendingsThisMonth);
+
 		let chartImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
 		chartImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonth))}`;
 		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
