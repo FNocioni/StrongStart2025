@@ -2,7 +2,6 @@ const express = require('express');
 const pool = require('./db');
 const path = require('path');
 const argon2 = require('argon2');
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const app = express();
 const port = 5000;
 app.use(express.json())
@@ -91,6 +90,7 @@ app.post('/transactions', async (req, res) => {
 
 app.get('/chart', async (req, res) => {
 	console.log("Received GET Request (chart)");
+	console.log("rendering chart...");
 
 	const today = new Date();
 	const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
@@ -102,36 +102,87 @@ app.get('/chart', async (req, res) => {
 
 	const width = parseInt(req.query.width) || 800;
 	const height = parseInt(req.query.height) || 600;
-	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+	const datesOfSpendingsThisMonth = JSON.parse(req.query.datesOfSpendingsThisMonth);
+	const spendingsThisMonth = JSON.parse(req.query.spendingsThisMonth);
+	const username = req.query.username;
 
+	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+	const ChartDataLabels = require('chartjs-plugin-datalabels');
+	const { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
+
+	Chart.register(
+		LineController,
+		LineElement,
+		PointElement,
+		CategoryScale,
+		LinearScale,
+		Tooltip,
+		Legend,
+		ChartDataLabels
+	);
+
+	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
 	try {
 		const configuration = {
 			type: 'line',
 			data: {
-				labels: daysInCurrentMonthAsStrings,
+				//labels: daysInCurrentMonthAsStrings,
+				labels: datesOfSpendingsThisMonth,
 				datasets: [{
-					label: 'My First Dataset',
-					data: [65, 59, 80, 81, 56, 55, 40],
+					label: 'Spendings This Month',
+					//data: [65, 59, 80, 81, 56, 55, 40],
+					data: spendingsThisMonth,
 					fill: false,
 					borderColor: 'rgb(75, 192, 192)',
 					tension: 0.1
 				}]
 			},
 			options: {
+				layout: {
+					padding: {
+						top: 30
+					}
+				},
 				responsive: false,
 				plugins: {
+					datalabels: {
+						display: true,
+						align: 'top',
+						formatter: function(value) {
+							return value;
+						},
+						color: 'rgba(100, 100, 100, 50)',
+						font: {
+							weight: 'bold'
+						}
+					},
 					legend: {
-						position: 'top',
+						position: 'bottom'
 					},
 					title: {
 						display: true,
-						text: 'Server-Side Chart Example'
+						position: 'bottom',
+						text: `${username}'s Spendings Overview`
+					}
+				},
+				scales: {
+					x: {
+						ticks: {
+							padding: 0
+						}
+					},
+					y: {
+						beginAtZero: false,
+						ticks: {
+							stepSize: 10,
+						}
 					}
 				}
 			}
 		};
 
 		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+		console.log("done rendering chart!");
 
 		res.set('Content-Type', 'image/png');
 		res.send(image);

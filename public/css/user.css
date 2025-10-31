@@ -28,8 +28,9 @@ nav {
     background-color: rgb(0, 0, 50);
 }
 
-.dashboardContent {
+#dashboardContent {
 	width: 100%;
+	height: 100%;
 	margin-top: 70px;
 	display: flex;
 	justify-content: space-between;
@@ -40,6 +41,7 @@ nav {
 	flex: 1;
 	background-color: #0D6CAB;
 	border-radius: 40px;
+	min-width: 40vw;
 	max-width: 40vw;
 	max-height: 83vh;
 	padding: 20px;
@@ -62,7 +64,7 @@ nav {
 	padding: 10px;
 }
 
-.chartImageDiv {
+#chartImageDiv {
 	background-color: white;
 	border-radius: 10px;
 	padding: 10px;
