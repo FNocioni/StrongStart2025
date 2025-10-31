@@ -5,7 +5,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="css/user.css">
+        <link type="text/css" rel="stylesheet" href="css/settings.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
         <!--Let browser know website is optimized for mobile-->
@@ -17,19 +17,20 @@
             <div class="nav-wrapper">
             <a id="user" class="brand-logo"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="user.html">Dashboard</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="settings.html">Settings  ⚙</a></li>
+                <button id="userPageButton" class="redirectButton">Dashboard</button>
+                <button id="loginPageButton" class="redirectButton">Login</button>
+                <button id="registerPageButton" class="redirectButton">Register</button>
+                <button id="settingsPageButton" class="redirectButton">Settings  ⚙</button>
             </ul>
             </div>
         </nav>
 		<div id="dashboardContent">
+                <button id="changeUsernameButton" class="actionButton">Change Username</button>
 		</div>
 
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="js/materialize.js"></script>
-        <script type="text/javascript" src="js/user.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
     </body>
 
     <footer class="page-footer">
