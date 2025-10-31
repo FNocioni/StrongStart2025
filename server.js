@@ -271,18 +271,62 @@ app.post('/changeUsername', async (req, res) => {
 			try {
 				const [result] = await pool.query('UPDATE users SET username = ? WHERE username = ?', [newUsername, oldUsername]);
 				if(result.length === 0) {
-					return res.status(400).json({success: false, error: 'Something Went Wrong!', data: rows});
+					return res.status(400).json({success: false, error: 'Something Went Wrong!'});
 				}
 			} catch(err) {
 				return res.status(500).json({error: 'Database Connection Failed'});
 			}
             return res.status(200).json({success: true, message: 'New Username Successfully Registered!'});
         }
-        return res.status(400).json({success: false, error: 'New Username Is Not Available!', data: rows});
+        return res.status(400).json({success: false, error: 'New Username Is Not Available!'});
     } catch(err) {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 });
+
+app.post('/changeName', async (req, res) => {
+    console.log("Received POST Request (changeName)");
+
+	const { username, newFirstName, newLastName } = req.body;
+
+    try {
+        //Check that the user exists first
+        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        if(rows.length === 0) {
+			return res.status(400).json({success: false, error: 'User Does Not Exist!'});
+        }
+
+		try {
+			const [result] = await pool.query('UPDATE users SET first_name = ?, last_name = ? WHERE username = ?', [newFirstName, newLastName, username]);
+			if(result.length === 0) {
+				return res.status(400).json({success: false, error: 'Something Went Wrong!'});
+			}
+		} catch(err) {
+			return res.status(500).json({error: 'Database Connection Failed'});
+		}
+		return res.status(200).json({success: true, message: 'New Username Successfully Registered!'});
+    } catch(err) {
+        return res.status(500).json({error: 'Database Connection Failed'});
+    }
+});
+
+app.get('/fullName', async (req, res) => {
+	console.log("Received GET Request (fullName)");
+
+	const { username } = req.query;
+	try {
+        const [rows] = await pool.query('SELECT first_name, last_name FROM users WHERE username = ?', [username]);
+        if(rows.length === 0) {
+			return res.status(400).json({success: false, error: 'User Does Not Exist!'});
+        }
+
+		res.set('Content-Type', 'text/plain');
+		res.send(`${rows[0].first_name}\n${rows[0].last_name}`);
+	} catch(err) {
+		res.status(500).send('Error fetching fullName!');
+	}
+});
+
 
 app.listen(port, '::', async () => {
     console.log(`✅ Server running at http://localhost:${port}`);
