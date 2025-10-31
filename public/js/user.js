@@ -6,7 +6,7 @@ user.textContent = `Logged in as ${username}`;
 
 var spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
-async function getTransactions() {
+async function getTransactions(renderChart = false) {
 	const params = {
 		'username': username
 	}
@@ -22,6 +22,7 @@ async function getTransactions() {
 	const today = new Date();
 	let spendingsThisMonth = [];
 	let datesOfSpendingsThisMonth = [];
+	let vendorsOfSpendingsThisMonth = [];
 	let innerHTMLStringBuffer = "" //buffer because otherwise, will force close '<p>' tag automatically
 	spendingsInfoDiv.innerHTML = ""
 	for(let x = 0; x < responseData.data.length; x++) {
@@ -47,6 +48,7 @@ async function getTransactions() {
 		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
 			spendingsThisMonth.push(amount);
 			datesOfSpendingsThisMonth.push(created_at_date);
+			vendorsOfSpendingsThisMonth.push(vendor);
 		}
 
 		let amountColor = 'red';
@@ -87,18 +89,35 @@ async function getTransactions() {
 		});
 	}
 
-	// render chart
 	const dashboardContentDiv = document.getElementById('dashboardContent');
 	let chartImageWidth = dashboardContentDiv.clientWidth * 0.586;
-	let chartImageHeight = dashboardContentDiv.clientHeight * 1.01;
-	let chartImageSrc = `/chart?width=${chartImageWidth}&height=${chartImageHeight}`;
-	chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
-	chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
-	chartImageSrc += `&username=${username}`;
-	chartImageSrc += `&timestamp=${new Date().getTime()}`;
+	let chartImageHeight = dashboardContentDiv.clientHeight * 0.9;
 
 	const chartImageDiv = document.getElementById("chartImageDiv");
-	chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Chart">`;
+	if(renderChart) {
+		// render chart
+		let chartImageSrc = `/chart?width=${chartImageWidth}&height=${chartImageHeight}`;
+		chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
+		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
+		chartImageSrc += `&username=${username}`;
+		chartImageSrc += `&timestamp=${new Date().getTime()}`;
+		chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Chart">`;
+	} else {
+		// render doughnut
+		let chartImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
+		chartImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonth))}`;
+		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
+		chartImageSrc += `&username=${username}`;
+		chartImageSrc += `&timestamp=${new Date().getTime()}`;
+		chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Doughnut">`;
+	}
 }
 
-getTransactions();
+getTransactions(true);
+
+let renderChart = true;
+const chartImageDiv = document.getElementById("chartImageDiv");
+chartImageDiv.addEventListener('click', () => {
+	renderChart = !renderChart;
+	getTransactions(renderChart);
+});

@@ -126,11 +126,9 @@ app.get('/chart', async (req, res) => {
 		const configuration = {
 			type: 'line',
 			data: {
-				//labels: daysInCurrentMonthAsStrings,
 				labels: datesOfSpendingsThisMonth,
 				datasets: [{
 					label: 'Spendings This Month',
-					//data: [65, 59, 80, 81, 56, 55, 40],
 					data: spendingsThisMonth,
 					fill: false,
 					borderColor: 'rgb(75, 192, 192)',
@@ -191,6 +189,92 @@ app.get('/chart', async (req, res) => {
 		res.status(500).send('Error generating chart');
 	}
 });
+
+app.get('/doughnut', async (req, res) => {
+	console.log("Received GET Request (doughnut)");
+	console.log("rendering dougnut...");
+
+	const today = new Date();
+	const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+	const monthShort = today.toLocaleString('en-US', { month: 'short' });
+	let daysInCurrentMonthAsStrings = [];
+	for(let x = 0; x < daysInCurrentMonth; x++) {
+		daysInCurrentMonthAsStrings.push(`${monthShort} ${x + 1}`)
+	}
+
+	const width = parseInt(req.query.width) || 800;
+	const height = parseInt(req.query.height) || 600;
+	const vendorsOfSpendingsThisMonth = JSON.parse(req.query.vendorsOfSpendingsThisMonth);
+	const spendingsThisMonth = JSON.parse(req.query.spendingsThisMonth);
+	const username = req.query.username;
+
+	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+	const { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
+
+	Chart.register(
+		LineController,
+		LineElement,
+		PointElement,
+		CategoryScale,
+		LinearScale,
+		Tooltip,
+	);
+
+	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+	try {
+		const configuration = {
+			type: 'doughnut',
+			data: {
+				labels: vendorsOfSpendingsThisMonth,
+				datasets: [{
+					label: 'Spendings This Month',
+					data: spendingsThisMonth,
+					/*
+					backgroundColor: [
+						'rgb(255, 99, 132)',
+						'rgb(54, 162, 235)',
+						'rgb(255, 205, 86)'
+					],
+					*/
+					//hoverOffset: 4
+				}]
+			},
+			options: {
+				plugins: {
+					datalabels: {
+						display: true,
+						align: 'top',
+						formatter: function(value) {
+							return value;
+						},
+						color: 'rgba(100, 100, 100, 50)',
+						font: {
+							weight: 'bold'
+						}
+					},
+					legend: {
+						position: 'bottom'
+					},
+					title: {
+						display: true,
+						position: 'bottom',
+						text: `${username}'s Spendings Overview`
+					}
+				},
+			}
+		};
+
+		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+		console.log("done rendering doughnut!");
+
+		res.set('Content-Type', 'image/png');
+		res.send(image);
+	} catch(err) {
+		console.error(err);
+		res.status(500).send('Error generating doughnut');
+	}
+});
+
 
 app.listen(port, '::', async () => {
     console.log(`✅ Server running at http://localhost:${port}`);
