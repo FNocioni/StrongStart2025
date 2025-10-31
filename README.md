@@ -42,6 +42,7 @@
         - chai
         - jest
         - jest-environment-jsdom
+        - [chartjs](https://www.chartjs.org/)
     - bash
         - [clearTrailingSpaces.bash](./scripts/clearTrailingSpaces.bash)
         - [mariadbCLI.bash](./scripts/mariadbCLI.bash)

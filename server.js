@@ -1,7 +1,6 @@
 const express = require('express');
 const pool = require('./db');
 const path = require('path');
-const argon2 = require('argon2');
 const app = express();
 const port = 5000;
 app.use(express.json())
