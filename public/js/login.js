@@ -48,7 +48,7 @@ async function login (){
     const responseData = await response.json();
 
     if(!response.ok){
-        if(responseData.error == "Username Does Not Exist"){
+        if(responseData.error == "Username Does Not Exist" || responseData.error == "Invalid Credentials"){
             username.classList = ['invalid'];
             password.classList = ['invalid'];
         }
