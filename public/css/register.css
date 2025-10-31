@@ -43,6 +43,10 @@ input {
 	border-radius: 10px;
 }
 
+.loginInstead:active, .loginInstead:hover, .loginInstead.focus {
+	background-color: rgb(50, 50, 50);
+}
+
 .background {
     background-size: cover;
     display: flex;

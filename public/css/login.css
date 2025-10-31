@@ -37,6 +37,10 @@ input {
 	border-radius: 10px;
 }
 
+.registerInstead:active, .registerInstead:hover, .registerInstead.focus {
+	background-color: rgb(50, 50, 50);
+}
+
 .background {
     background-size: cover;
     display: flex;

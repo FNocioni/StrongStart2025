@@ -5,11 +5,14 @@ var password = document.getElementById("password");
 var submitButton = document.getElementById("submit_button");
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var baseUrl = "http://localhost:5000/"
-
-
+var registerInsteadButton = document.getElementById("registerInsteadButton");
 
 loginForm.addEventListener('input', function() {
     submitButton.disabled = isSubmitDisabled();
+});
+
+registerInsteadButton.addEventListener('click', function() {
+	window.location.href = '/register.html';
 });
 
 // DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH
@@ -45,7 +48,7 @@ async function login (){
     const responseData = await response.json();
 
     if(!response.ok){
-        if(responseData.error == "Username Does Not Exist"){
+        if(responseData.error == "Username Does Not Exist" || responseData.error == "Invalid Credentials"){
             username.classList = ['invalid'];
             password.classList = ['invalid'];
         }
@@ -56,8 +59,6 @@ async function login (){
         window.location.href = '/user.html';
     }
 }
-
-
 
 function isSubmitDisabled(){
     return (!username.value || !password.value);

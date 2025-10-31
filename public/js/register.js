@@ -6,6 +6,7 @@ var username = document.getElementById("username");
 var email = document.getElementById("email");
 var password = document.getElementById("password");
 var submitButton = document.getElementById("submit_button");
+var loginInsteadButton = document.getElementById("loginInsteadButton");
 
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -16,6 +17,10 @@ registerForm.addEventListener('input', function() {
     validateEmail();
     validateUsername();
     submitButton.disabled = isSubmitDisabled();
+});
+
+loginInsteadButton.addEventListener('click', function() {
+	window.location.href = '/login.html';
 });
 
 // DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH

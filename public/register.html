@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-<!--To start HTTP Server: python -m http.server 5000-->
-
 <html>
     <head>
         <!--Import Google Icon Font-->
@@ -20,10 +18,10 @@
             <div class="col s12" id="register_form">
 				<div class="row">
 					<div class="col s6 offset-s8" style="justify-content: center; display: flex;">
-						<li class="loginInstead"><a href="login.html">Login Instead</a></li>
+						<button class="loginInstead" id="loginInsteadButton">Login Instead</button>
 					</div>
 				</div>
-                <img src="images/logo.png" width="300" height="300" style="display: block; margin-left: auto; margin-right: auto;">
+                <img src="images/logo.png" width="250" height="250" style="display: block; margin-left: auto; margin-right: auto;">
                 <div class="row">
                     <div class="input-field col s6" style="color: rgb(165, 165, 165);">
                         <i class="material-icons prefix">account_circle</i>
@@ -39,21 +37,21 @@
                     <div class="input-field col s12">
                         <input id="username" type="text">
                         <label for="username">Username</label>
-                        <span class="helper-text" data-error="Username already exists">Helper text</span>
+                        <span class="helper-text" data-error="Username already exists"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="email" type="email">
                         <label for="email">Email</label>
-                        <span class="helper-text" data-error="Please enter a valid e-mail address">Helper text</span>
+                        <span class="helper-text" data-error="Please enter a valid e-mail address"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="password" type="password">
                         <label for="password">Password</label>
-                        <span class="helper-text" data-error="Password must be at-least 8 characters">Helper text</span>
+                        <span class="helper-text" data-error="Password must be at-least 8 characters"></span>
                     </div>
                 </div>
                 <div class="row">
@@ -93,8 +91,4 @@
             </div>
         </div>
     </footer>
-
-
-
 </html>
-
