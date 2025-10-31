@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-
-<!--To start HTTP Server: python -m http.server 5000-->
-
 <html>
     <head>
         <!--Import Google Icon Font-->
@@ -16,7 +13,6 @@
     </head>
 
     <body class="background" background="images/dashboard_background.jpg">
-
         <nav>
             <div class="nav-wrapper">
             <a id="user" class="brand-logo"></a>
@@ -24,14 +20,29 @@
                 <li><a href="user.html">Dashboard</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="register.html">Register</a></li>
+                <li><a href="settings.html">Settings  ⚙</a></li>
             </ul>
             </div>
         </nav>
+		<div id="dashboardContent">
+			<div class="spendings">
+				<div class="spendingsTitle">
+					Spendings
+				</div>
+				<div id="spendingsInfoDiv">
+					<p class="transactionItem">
+					LOADING USER TRANSACTIONS...
+					</p>
+				</div>
+			</div>
+			<div id="chartImageDiv">
+				<!--image will be rendered by user.js-->
+			</div>
+		</div>
 
         <!--JavaScript at end of body for optimized loading-->
         <script type="text/javascript" src="js/materialize.js"></script>
         <script type="text/javascript" src="js/user.js"></script>
-
     </body>
 
     <footer class="page-footer">
@@ -55,8 +66,4 @@
             </div>
         </div>
     </footer>
-
-
-
 </html>
-
