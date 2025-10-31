@@ -304,7 +304,7 @@ app.post('/changeName', async (req, res) => {
 		} catch(err) {
 			return res.status(500).json({error: 'Database Connection Failed'});
 		}
-		return res.status(200).json({success: true, message: 'New Username Successfully Registered!'});
+		return res.status(200).json({success: true, message: 'New Full Name Successfully Registered!'});
     } catch(err) {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
