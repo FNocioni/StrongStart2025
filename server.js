@@ -75,8 +75,8 @@ app.post('/transactions', async (req, res) => {
 	const { username } = req.body;
 
     try {
-        //Check that the username is available
-        const [rows] = await pool.query('SELECT * FROM transactions WHERE username = ?', [username]);
+        //Check that the user's user_id exists in transactions db
+        const [rows] = await pool.query('SELECT * FROM transactions WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
         if(rows.length === 0) {
             return res.status(400).json({success: false, error: 'User Has No Existing Transactions!'});
         }
