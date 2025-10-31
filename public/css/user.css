@@ -1,14 +1,3 @@
-.login {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(20, 20, 20, 90%);
-    border: 5px solid rgb(187, 187, 187);
-    border-radius: 10px;
-    padding: 100px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
 /*Fix from materialize.css
 textarea.materialize-textarea:focus:not([readonly]) {
     border-bottom: 1px solid #a69926;
@@ -22,15 +11,37 @@ input[type=text]:not(.browser-default):focus:not([readonly]) + label {
 
 */
 
-.nav-wrapper{
+body {
+	display: block;
+	margin: 0;
+}
+
+nav {
+	width: 100%;
+	display: block;
+	position: absolute;
+}
+
+.nav-wrapper {
     padding-left: 50px;
     padding-right: 50px;
     background-color: rgb(0, 0, 50);
 }
 
+#dashboardContent {
+	width: 100%;
+	height: 100%;
+	margin-top: 70px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
 .spendings {
+	flex: 1;
 	background-color: #0D6CAB;
 	border-radius: 40px;
+	min-width: 40vw;
 	max-width: 40vw;
 	max-height: 83vh;
 	padding: 20px;
@@ -50,6 +61,12 @@ input[type=text]:not(.browser-default):focus:not([readonly]) + label {
 	border: 3px solid;
 	border-color: rgba(50, 50, 50, 3);;
 
+	padding: 10px;
+}
+
+#chartImageDiv {
+	background-color: white;
+	border-radius: 10px;
 	padding: 10px;
 }
 
