@@ -5,11 +5,14 @@ var password = document.getElementById("password");
 var submitButton = document.getElementById("submit_button");
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var baseUrl = "http://localhost:5000/"
-
-
+var registerInsteadButton = document.getElementById("registerInsteadButton");
 
 loginForm.addEventListener('input', function() {
     submitButton.disabled = isSubmitDisabled();
+});
+
+registerInsteadButton.addEventListener('click', function() {
+	window.location.href = '/register.html';
 });
 
 // DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH DO NOT CHANGE DO NOT TOUCH
