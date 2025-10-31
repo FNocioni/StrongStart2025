@@ -1,5 +1,9 @@
 var baseUrl = "http://localhost:5000/"
 
+var username = `${localStorage.getItem("user")}`;
+var user = document.getElementById("user");
+user.textContent = `Logged in as ${username}`;
+
 let userPageButton = document.getElementById("userPageButton");
 let loginPageButton = document.getElementById("loginPageButton");
 let registerPageButton = document.getElementById("registerPageButton");
@@ -28,10 +32,6 @@ registerPageButton.addEventListener('click', function() {
 settingsPageButton.addEventListener('click', function() {
 	window.location.href = '/settings.html';
 });
-
-var username = `${localStorage.getItem("user")}`;
-var user = document.getElementById("user");
-user.textContent = `Logged in as ${username}`;
 
 var spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
