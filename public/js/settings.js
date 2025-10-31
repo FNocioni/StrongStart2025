@@ -2,8 +2,11 @@ var baseUrl = "http://localhost:5000/"
 
 var username = `${localStorage.getItem("user")}`;
 const user = document.getElementById("user");
+const changeUsernameButtonContext = document.getElementById("changeUsernameButtonContext");
 user.textContent = `Logged in as ${username}`;
+changeUsernameButtonContext.textContent = `Current Username: ${username}`;
 
+const changeNameButtonContext = document.getElementById("changeNameButtonContext");
 let firstName = "";
 let lastName = "";
 async function fetchFullName() {
@@ -17,6 +20,8 @@ async function fetchFullName() {
 		lastName = data.substring(data.indexOf('\n') + 1, data.length);
 		localStorage.setItem("firstName", firstName);
 		localStorage.setItem("lastName", lastName);
+		changeNameButtonContext.textContent = `Current Name (First, Last): ${firstName}, ${lastName}`;
+
 	}).catch(error => console.error('Request failed', error));
 }
 fetchFullName();
@@ -96,6 +101,7 @@ changeUsernameButton.addEventListener('click', async function() {
 		localStorage.setItem("user", newUsername);
 		username = `${localStorage.getItem("user")}`;
 		user.textContent = `Logged in as ${username}`;
+		changeUsernameButtonContext.textContent = `Current Username: ${username}`;
 	}
 });
 
@@ -138,5 +144,7 @@ changeNameButton.addEventListener('click', async function() {
 		
 		localStorage.setItem("lastName", newLastName);
 		lastName = `${localStorage.getItem("lastName")}`;
+
+		changeNameButtonContext.textContent = `Current Name (First, Last): ${firstName}, ${lastName}`;
 	}
 });
