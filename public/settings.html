@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/settings.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body class="background" background="images/dashboard_background.jpg">
+        <nav>
+            <div class="nav-wrapper">
+            <a id="user" class="brand-logo"></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <button id="userPageButton" class="redirectButton">Dashboard</button>
+                <button id="loginPageButton" class="redirectButton">Login</button>
+                <button id="registerPageButton" class="redirectButton">Register</button>
+                <button id="settingsPageButton" class="redirectButton">Settings  ⚙</button>
+            </ul>
+            </div>
+        </nav>
+		<div id="dashboardContent">
+			<div class="settingsBoard">
+				<div class="settingsBoardItem">
+					<div class="settingsBoardItemRow">
+						<button id="changeUsernameButton" class="actionButton">Change Username</button>
+						<span id="changeUsernameButtonContext">LOADING...</span>
+					</div>
+				</div>
+				<div class="settingsBoardItem">
+					<div class="settingsBoardItemRow">
+						<button id="changeNameButton" class="actionButton">Change Name</button>
+						<span id="changeNameButtonContext">LOADING...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <!--JavaScript at end of body for optimized loading-->
+        <script type="text/javascript" src="js/materialize.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
+    </body>
+
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Numa Capital</h5>
+                <div style="display:flex; justify-content: left;">
+                    <i class="material-icons dp48">
+                        copyright
+                    </i>
+                    &nbsp;2025 Copyright Numa Capital
+                </div>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                <li><a class="grey-text text-lighten-3" href="about.html">About Numa Capital</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </footer>
+</html>

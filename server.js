@@ -20,18 +20,18 @@ app.post('/login', async (req, res) => {
 
     const { username, password } = req.body;
 
-    try{
+    try {
         //Check that the username exists
         const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
-        if(rows.length == 0){
+        if(rows.length == 0) {
             return res.status(400).json({success: false, error: 'Username Does Not Exist'});
         }
 
-        if(rows[0].password == password){
+        if(rows[0].password == password) {
             return res.status(200).json({success: true, message: `Logged in as ${username}`});
         }
 
-    } catch(err){
+    } catch(err) {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 
@@ -52,10 +52,10 @@ app.post('/register', async (req, res) => {
 
     const { firstName, lastName, username, email, password } = req.body;
 
-    try{
+    try {
         //Check that the username is available
         const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
-        if(rows.length != 0){
+        if(rows.length != 0) {
             return res.status(400).json({success: false, error: 'Username Already Exists'});
         }
 
@@ -64,7 +64,7 @@ app.post('/register', async (req, res) => {
             [firstName, lastName, username, email, password]);
 
         return res.status(200).json({success: true, message: 'User Sucessfully Created'});
-    } catch(err){
+    } catch(err) {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 });
@@ -74,15 +74,15 @@ app.post('/transactions', async (req, res) => {
 
 	const { username } = req.body;
 
-    try{
-        //Check that the username is available
-        const [rows] = await pool.query('SELECT * FROM transactions WHERE username = ?', [username]);
-        if(rows.length === 0){
+    try {
+        //Check that the user's user_id exists in transactions db
+        const [rows] = await pool.query('SELECT * FROM transactions WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
+        if(rows.length === 0) {
             return res.status(400).json({success: false, error: 'User Has No Existing Transactions!'});
         }
 
         return res.status(200).json({success: true, message: 'User Transactions Successfully Fetched!', data: rows});
-    } catch(err){
+    } catch(err) {
         return res.status(500).json({error: 'Database Connection Failed'});
     }
 });
@@ -256,6 +256,74 @@ app.get('/doughnut', async (req, res) => {
 	} catch(err) {
 		console.error(err);
 		res.status(500).send('Error generating doughnut');
+	}
+});
+
+app.post('/changeUsername', async (req, res) => {
+    console.log("Received POST Request (changeUsername)");
+
+	const { newUsername, oldUsername } = req.body;
+
+    try {
+        //Check that the new username is available
+        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [newUsername]);
+        if(rows.length === 0) {
+			try {
+				const [result] = await pool.query('UPDATE users SET username = ? WHERE username = ?', [newUsername, oldUsername]);
+				if(result.length === 0) {
+					return res.status(400).json({success: false, error: 'Something Went Wrong!'});
+				}
+			} catch(err) {
+				return res.status(500).json({error: 'Database Connection Failed'});
+			}
+            return res.status(200).json({success: true, message: 'New Username Successfully Registered!'});
+        }
+        return res.status(400).json({success: false, error: 'New Username Is Not Available!'});
+    } catch(err) {
+        return res.status(500).json({error: 'Database Connection Failed'});
+    }
+});
+
+app.post('/changeName', async (req, res) => {
+    console.log("Received POST Request (changeName)");
+
+	const { username, newFirstName, newLastName } = req.body;
+
+    try {
+        //Check that the user exists first
+        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        if(rows.length === 0) {
+			return res.status(400).json({success: false, error: 'User Does Not Exist!'});
+        }
+
+		try {
+			const [result] = await pool.query('UPDATE users SET first_name = ?, last_name = ? WHERE username = ?', [newFirstName, newLastName, username]);
+			if(result.length === 0) {
+				return res.status(400).json({success: false, error: 'Something Went Wrong!'});
+			}
+		} catch(err) {
+			return res.status(500).json({error: 'Database Connection Failed'});
+		}
+		return res.status(200).json({success: true, message: 'New Full Name Successfully Registered!'});
+    } catch(err) {
+        return res.status(500).json({error: 'Database Connection Failed'});
+    }
+});
+
+app.get('/fullName', async (req, res) => {
+	console.log("Received GET Request (fullName)");
+
+	const { username } = req.query;
+	try {
+        const [rows] = await pool.query('SELECT first_name, last_name FROM users WHERE username = ?', [username]);
+        if(rows.length === 0) {
+			return res.status(400).json({success: false, error: 'User Does Not Exist!'});
+        }
+
+		res.set('Content-Type', 'text/plain');
+		res.send(`${rows[0].first_name}\n${rows[0].last_name}`);
+	} catch(err) {
+		res.status(500).send('Error fetching fullName!');
 	}
 });
 

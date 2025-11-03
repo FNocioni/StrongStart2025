@@ -34,10 +34,11 @@ input {
 	padding-top: 7px;
 	padding-bottom: 7px;
 	margin-bottom: -40px;
+	margin-left: 5px;
 	border-radius: 10px;
 }
 
-.registerInstead:active, .registerInstead:hover, .registerInstead.focus {
+.registerInstead:active, .registerInstead:hover, .registerInstead:focus, .registerInstead:disabled, .registerInstead:focus-visible {
 	background-color: rgb(50, 50, 50);
 }
 

@@ -43,7 +43,7 @@ input {
 	border-radius: 10px;
 }
 
-.loginInstead:active, .loginInstead:hover, .loginInstead.focus {
+.loginInstead:active, .loginInstead:hover, .loginInstead:focus, .loginInstead:disabled, .loginInstead:focus-visible {
 	background-color: rgb(50, 50, 50);
 }
 
