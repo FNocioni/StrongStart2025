@@ -4,9 +4,9 @@
 
 ## Authors
 - Federico (Mentor)
-- Jack
-- eloy
 - Danish
+- Eloy
+- Jack
 - Jinwoo
 
 ## Sections
