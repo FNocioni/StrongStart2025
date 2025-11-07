@@ -66,7 +66,7 @@ renderGraphAsImageButton.addEventListener('click', async function() {
 		const transaction_id = `${responseData.data[x].transaction_id}`;
 		const updated_at = `${responseData.data[x].updated_at}`;
 		const username = `${responseData.data[x].username}`;
-		const vendor = `${responseData.data[x].vendor}`;
+		const vendor_name = `${responseData.data[x].vendor_name}`;
 
 		const created_at_date = created_at.substring(0, created_at.indexOf('T'));
 		const created_at_time = created_at.substring(created_at.indexOf('T') + 1, created_at.indexOf(".000Z"));
@@ -78,7 +78,7 @@ renderGraphAsImageButton.addEventListener('click', async function() {
 		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
 			spendingsThisMonth.push(amount);
 			datesOfSpendingsThisMonth.push(created_at_date);
-			vendorsOfSpendingsThisMonth.push(vendor);
+			vendorsOfSpendingsThisMonth.push(vendor_name);
 		}
 	}
 
@@ -122,7 +122,7 @@ renderDoughnutAsImageButton.addEventListener('click', async function() {
 		const transaction_id = `${responseData.data[x].transaction_id}`;
 		const updated_at = `${responseData.data[x].updated_at}`;
 		const username = `${responseData.data[x].username}`;
-		const vendor = `${responseData.data[x].vendor}`;
+		const vendor_name = `${responseData.data[x].vendor_name}`;
 
 		const created_at_date = created_at.substring(0, created_at.indexOf('T'));
 		const created_at_time = created_at.substring(created_at.indexOf('T') + 1, created_at.indexOf(".000Z"));
@@ -134,7 +134,7 @@ renderDoughnutAsImageButton.addEventListener('click', async function() {
 		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
 			spendingsThisMonth.push(amount);
 			datesOfSpendingsThisMonth.push(created_at_date);
-			vendorsOfSpendingsThisMonth.push(vendor);
+			vendorsOfSpendingsThisMonth.push(vendor_name);
 		}
 	}
 
@@ -193,7 +193,7 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 		const transaction_id = `${responseData.data[x].transaction_id}`;
 		const updated_at = `${responseData.data[x].updated_at}`;
 		const username = `${responseData.data[x].username}`;
-		const vendor = `${responseData.data[x].vendor}`;
+		const vendor_name = `${responseData.data[x].vendor_name}`;
 
 		const created_at_date = created_at.substring(0, created_at.indexOf('T'));
 		const created_at_time = created_at.substring(created_at.indexOf('T') + 1, created_at.indexOf(".000Z"));
@@ -205,7 +205,7 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
 			spendingsThisMonth.push(amount);
 			datesOfSpendingsThisMonth.push(created_at_date);
-			vendorsOfSpendingsThisMonth.push(vendor);
+			vendorsOfSpendingsThisMonth.push(vendor_name);
 		}
 
 		let amountColor = 'red';
@@ -215,7 +215,7 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 
 		innerHTMLStringBuffer += `<p id="transactionItem_${x}" class="transactionItem">`;
 		innerHTMLStringBuffer += 	`<span class="transactionItemRow">`;
-		innerHTMLStringBuffer += 		`<span><b>${vendor}</b></span>`;
+		innerHTMLStringBuffer += 		`<span><b>${vendor_name}</b></span>`;
 		innerHTMLStringBuffer += 		`<span>`;
 		innerHTMLStringBuffer += 			`<span style="color: ${amountColor};">${amount}</span>`;
 		innerHTMLStringBuffer += 			`<span style="color: rgba(50, 50, 50, 100);"> [${created_at_date}, ${created_at_time}]</span>`;

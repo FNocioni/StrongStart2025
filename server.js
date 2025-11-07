@@ -76,7 +76,7 @@ app.post('/transactions', async (req, res) => {
 
     try {
         //Check that the user's user_id exists in transactions db
-        const [rows] = await pool.query('SELECT * FROM transactions WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
+        const [rows] = await pool.query('SELECT * FROM transactions JOIN vendors ON transactions.vendor_id = vendors.vendor_id WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
         if(rows.length === 0) {
             return res.status(400).json({success: false, error: 'User Has No Existing Transactions!'});
         }
