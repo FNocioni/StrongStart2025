@@ -193,14 +193,6 @@ app.get('/doughnut', async (req, res) => {
 	console.log("Received GET Request (doughnut)");
 	console.log("rendering dougnut...");
 
-	const today = new Date();
-	const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-	const monthShort = today.toLocaleString('en-US', { month: 'short' });
-	let daysInCurrentMonthAsStrings = [];
-	for(let x = 0; x < daysInCurrentMonth; x++) {
-		daysInCurrentMonthAsStrings.push(`${monthShort} ${x + 1}`)
-	}
-
 	const width = parseInt(req.query.width) || 800;
 	const height = parseInt(req.query.height) || 600;
 	const vendorsOfSpendingsThisMonth = JSON.parse(req.query.vendorsOfSpendingsThisMonth);

@@ -7,6 +7,7 @@
         <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
         <link type="text/css" rel="stylesheet" href="css/user.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,6 +18,8 @@
             <div class="nav-wrapper">
             <a id="user" class="brand-logo"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <button id="renderGraphAsImageButton" class="redirectButton">Download Graph</button>
+                <button id="renderDoughnutAsImageButton" class="redirectButton">Download Doughnut</button>
                 <button id="userPageButton" class="redirectButton">Dashboard</button>
                 <button id="loginPageButton" class="redirectButton">Login</button>
                 <button id="registerPageButton" class="redirectButton">Register</button>
@@ -35,8 +38,15 @@
 					</p>
 				</div>
 			</div>
-			<div id="chartImageDiv">
+			<div id="graphChartDiv">
 				<!--image will be rendered by user.js-->
+				<!--chart will be rendered by user.js-->
+				<canvas id="graphChart"></canvas>
+			</div>
+			<div id="doughnutChartDiv">
+				<!--image will be rendered by user.js-->
+				<!--chart will be rendered by user.js-->
+				<canvas id="doughnutChart"></canvas>
 			</div>
 		</div>
 

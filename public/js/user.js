@@ -8,6 +8,8 @@ let userPageButton = document.getElementById("userPageButton");
 let loginPageButton = document.getElementById("loginPageButton");
 let registerPageButton = document.getElementById("registerPageButton");
 let settingsPageButton = document.getElementById("settingsPageButton");
+let renderGraphAsImageButton = document.getElementById("renderGraphAsImageButton");
+let renderDoughnutAsImageButton = document.getElementById("renderDoughnutAsImageButton");
 
 userPageButton.addEventListener('click', function() {
 	window.location.href = '/user.html';
@@ -33,9 +35,135 @@ settingsPageButton.addEventListener('click', function() {
 	window.location.href = '/settings.html';
 });
 
+renderGraphAsImageButton.addEventListener('click', async function() {
+	const chartImageWidth=1920;
+	const chartImageHeight=1080;
+
+	const params = {
+		'username': username
+	}
+
+	const response = await fetch(baseUrl + "transactions", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(params)
+	});
+
+	const responseData = await response.json();
+
+	const today = new Date();
+	let spendingsThisMonth = [];
+	let datesOfSpendingsThisMonth = [];
+	let vendorsOfSpendingsThisMonth = [];
+	for(let x = 0; x < responseData.data.length; x++) {
+		const amount = `${responseData.data[x].amount}`;
+		const city = `${responseData.data[x].city}`;
+		const country_name = `${responseData.data[x].country_name}`;
+		const created_at = `${responseData.data[x].created_at}`;
+		const postal_code = `${responseData.data[x].postal_code}`;
+		const state_name = `${responseData.data[x].state_name}`;
+		const street_name = `${responseData.data[x].street_name}`;
+		const transaction_id = `${responseData.data[x].transaction_id}`;
+		const updated_at = `${responseData.data[x].updated_at}`;
+		const username = `${responseData.data[x].username}`;
+		const vendor = `${responseData.data[x].vendor}`;
+
+		const created_at_date = created_at.substring(0, created_at.indexOf('T'));
+		const created_at_time = created_at.substring(created_at.indexOf('T') + 1, created_at.indexOf(".000Z"));
+
+		const updated_at_date = updated_at.substring(0, updated_at.indexOf('T'));
+		const updated_at_time = updated_at.substring(updated_at.indexOf('T') + 1, updated_at.indexOf(".000Z"));
+
+		const spentDate = new Date(created_at_date);
+		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
+			spendingsThisMonth.push(amount);
+			datesOfSpendingsThisMonth.push(created_at_date);
+			vendorsOfSpendingsThisMonth.push(vendor);
+		}
+	}
+
+	// render chart
+	let chartImageSrc = `/chart?width=${chartImageWidth}&height=${chartImageHeight}`;
+	chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
+	chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
+	chartImageSrc += `&username=${username}`;
+	chartImageSrc += `&timestamp=${new Date().getTime()}`;
+	window.open(`${chartImageSrc}`);
+});
+
+renderDoughnutAsImageButton.addEventListener('click', async function() {
+	const chartImageWidth=1920;
+	const chartImageHeight=1080;
+
+	const params = {
+		'username': username
+	}
+
+	const response = await fetch(baseUrl + "transactions", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(params)
+	});
+
+	const responseData = await response.json();
+
+	const today = new Date();
+	let spendingsThisMonth = [];
+	let datesOfSpendingsThisMonth = [];
+	let vendorsOfSpendingsThisMonth = [];
+	for(let x = 0; x < responseData.data.length; x++) {
+		const amount = `${responseData.data[x].amount}`;
+		const city = `${responseData.data[x].city}`;
+		const country_name = `${responseData.data[x].country_name}`;
+		const created_at = `${responseData.data[x].created_at}`;
+		const postal_code = `${responseData.data[x].postal_code}`;
+		const state_name = `${responseData.data[x].state_name}`;
+		const street_name = `${responseData.data[x].street_name}`;
+		const transaction_id = `${responseData.data[x].transaction_id}`;
+		const updated_at = `${responseData.data[x].updated_at}`;
+		const username = `${responseData.data[x].username}`;
+		const vendor = `${responseData.data[x].vendor}`;
+
+		const created_at_date = created_at.substring(0, created_at.indexOf('T'));
+		const created_at_time = created_at.substring(created_at.indexOf('T') + 1, created_at.indexOf(".000Z"));
+
+		const updated_at_date = updated_at.substring(0, updated_at.indexOf('T'));
+		const updated_at_time = updated_at.substring(updated_at.indexOf('T') + 1, updated_at.indexOf(".000Z"));
+
+		const spentDate = new Date(created_at_date);
+		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
+			spendingsThisMonth.push(amount);
+			datesOfSpendingsThisMonth.push(created_at_date);
+			vendorsOfSpendingsThisMonth.push(vendor);
+		}
+	}
+
+	// render doughnut
+	let vendorsToSpendingsMap = {};
+	for(let x = 0; x < vendorsOfSpendingsThisMonth.length; x++) {
+		if(parseFloat(spendingsThisMonth[x]) >= 0) {
+			continue;
+		}
+		vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] = (vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] || 0.0) + parseFloat(spendingsThisMonth[x]);
+	}
+	vendorsOfSpendingsThisMonth = [];
+	spendingsThisMonth = [];
+	for(const key in vendorsToSpendingsMap) {
+		vendorsOfSpendingsThisMonth.push(key + '\n' + vendorsToSpendingsMap[key].toFixed(2));
+		spendingsThisMonth.push(String(vendorsToSpendingsMap[key]));
+	}
+
+	let doughnutImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
+	doughnutImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonth))}`;
+	doughnutImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
+	doughnutImageSrc += `&username=${username}`;
+	doughnutImageSrc += `&timestamp=${new Date().getTime()}`;
+	window.open(`${doughnutImageSrc}`);
+});
+
 var spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
-async function getTransactions(renderChart = false) {
+async function getTransactions(renderGraph = false, renderDoughnut = false) {
 	const params = {
 		'username': username
 	}
@@ -122,17 +250,69 @@ async function getTransactions(renderChart = false) {
 	let chartImageWidth = dashboardContentDiv.clientWidth * 0.586;
 	let chartImageHeight = dashboardContentDiv.clientHeight * 0.9;
 
-	const chartImageDiv = document.getElementById("chartImageDiv");
-	if(renderChart) {
-		// render chart
-		let chartImageSrc = `/chart?width=${chartImageWidth}&height=${chartImageHeight}`;
-		chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
-		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
-		chartImageSrc += `&username=${username}`;
-		chartImageSrc += `&timestamp=${new Date().getTime()}`;
-		chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Chart">`;
-	} else {
-		// render doughnut
+	if(renderGraph)
+	{
+		const graphChart = document.getElementById('graphChart');
+		new Chart(graphChart, {
+			type: 'line',
+			data: {
+				labels: datesOfSpendingsThisMonth,
+				datasets: [{
+					label: 'Spendings This Month',
+					data: spendingsThisMonth,
+					fill: false,
+					borderColor: 'rgb(75, 192, 192)',
+					tension: 0.1
+				}]
+			},
+			options: {
+				layout: {
+					padding: {
+						top: 30
+					}
+				},
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					datalabels: {
+						display: true,
+						align: 'top',
+						formatter: function(value) {
+							return value;
+						},
+						color: 'rgba(100, 100, 100, 50)',
+						font: {
+							weight: 'bold'
+						}
+					},
+					legend: {
+						position: 'bottom'
+					},
+					title: {
+						display: true,
+						position: 'bottom',
+						text: `${username}'s Spendings Overview`
+					}
+				},
+				scales: {
+					x: {
+						ticks: {
+							padding: 0
+						}
+					},
+					y: {
+						beginAtZero: false,
+						ticks: {
+							stepSize: 10,
+						}
+					}
+				}
+			}
+		});
+	}
+
+	if(renderDoughnut)
+	{
 		let vendorsToSpendingsMap = {};
 		for(let x = 0; x < vendorsOfSpendingsThisMonth.length; x++) {
 			if(parseFloat(spendingsThisMonth[x]) >= 0) {
@@ -140,7 +320,6 @@ async function getTransactions(renderChart = false) {
 			}
 			vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] = (vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] || 0.0) + parseFloat(spendingsThisMonth[x]);
 		}
-		console.log(vendorsToSpendingsMap);
 		vendorsOfSpendingsThisMonth = [];
 		spendingsThisMonth = [];
 		for(const key in vendorsToSpendingsMap) {
@@ -148,23 +327,33 @@ async function getTransactions(renderChart = false) {
 			spendingsThisMonth.push(String(vendorsToSpendingsMap[key]));
 		}
 
-		console.log(vendorsOfSpendingsThisMonth);
-		console.log(spendingsThisMonth);
-
-		let chartImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
-		chartImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonth))}`;
-		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
-		chartImageSrc += `&username=${username}`;
-		chartImageSrc += `&timestamp=${new Date().getTime()}`;
-		chartImageDiv.innerHTML = `<img src="${chartImageSrc}" alt="Spendings Doughnut">`;
+		const doughnutChart = document.getElementById('doughnutChart');
+		new Chart(doughnutChart, {
+			type: 'doughnut',
+			data: {
+				labels: vendorsOfSpendingsThisMonth,
+				datasets: [{
+					label: 'Spendings This Month',
+					data: spendingsThisMonth,
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						display: true,
+						position: 'bottom'
+					},
+					title: {
+						display: true,
+						position: 'bottom',
+						text: `${username}'s Spendings Overview`
+					}
+				},
+			}
+		});
 	}
 }
 
-getTransactions(true);
-
-let renderChart = true;
-const chartImageDiv = document.getElementById("chartImageDiv");
-chartImageDiv.addEventListener('click', () => {
-	renderChart = !renderChart;
-	getTransactions(renderChart);
-});
+getTransactions(true, true);
