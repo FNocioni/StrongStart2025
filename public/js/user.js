@@ -8,8 +8,8 @@ const userPageButton = document.getElementById("userPageButton");
 const loginPageButton = document.getElementById("loginPageButton");
 const registerPageButton = document.getElementById("registerPageButton");
 const settingsPageButton = document.getElementById("settingsPageButton");
-const renderGraphAsImageButton = document.getElementById("renderGraphAsImageButton");
-const renderDoughnutAsImageButton = document.getElementById("renderDoughnutAsImageButton");
+const renderLeftChartAsImageButton = document.getElementById("renderLeftChartAsImageButton");
+const renderRightChartAsImageButton = document.getElementById("renderRightChartAsImageButton");
 const alternateChartsButton = document.getElementById("alternateChartsButton");
 const spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
@@ -18,6 +18,10 @@ let datesOfSpendingsThisMonth;
 let vendorsOfSpendingsThisMonth;
 let categoriesToSpendingsMap;
 let categoriesToNegativeSpendingsMap;
+let categoriesThisMonth;
+let matchedSpendingsThisMonth;
+let categoriesNegativeThisMonth;
+let matchedNegativeSpendingsThisMonth;
 let leftChart = document.getElementById('leftChart');
 let rightChart = document.getElementById('rightChart');
 let leftChartInstance;
@@ -28,6 +32,10 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 	vendorsOfSpendingsThisMonth = [];
 	categoriesToSpendingsMap = {};
 	categoriesToNegativeSpendingsMap = {};
+	categoriesThisMonth = [];
+	matchedSpendingsThisMonth = [];
+	categoriesNegativeThisMonth = [];
+	matchedNegativeSpendingsThisMonth = [];
 
 	const params = {
 		'username': username
@@ -99,15 +107,11 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 
 	spendingsInfoDiv.innerHTML = innerHTMLStringBuffer;
 
-	let categoriesThisMonth = [];
-	let matchedSpendingsThisMonth = [];
 	for(const key in categoriesToSpendingsMap) {
 		categoriesThisMonth.push(key);
 		matchedSpendingsThisMonth.push(String(categoriesToSpendingsMap[key]));
 	}
 
-	let categoriesNegativeThisMonth = [];
-	let matchedNegativeSpendingsThisMonth = [];
 	for(const key in categoriesToNegativeSpendingsMap) {
 		categoriesNegativeThisMonth.push(key);
 		matchedNegativeSpendingsThisMonth.push(String(categoriesToNegativeSpendingsMap[key]));
@@ -180,12 +184,14 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 					},
 					legend: {
 						position: 'bottom'
-					},
+					}
+					/*
 					title: {
 						display: true,
 						position: 'bottom',
 						text: `${username}'s Spendings Overview`
 					}
+					*/
 				},
 				scales: {
 					x: {
@@ -236,12 +242,14 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 					legend: {
 						display: true,
 						position: 'bottom'
-					},
+					}
+					/*
 					title: {
 						display: true,
 						position: 'bottom',
 						text: `${username}'s Spendings Overview`
 					}
+					*/
 				},
 			}
 		});
@@ -254,7 +262,7 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 			data: {
 				labels: categoriesThisMonth,
 				datasets:  [{
-					label: 'Spending Categories This Month',
+					label: 'Spending This Month',
 					data: matchedSpendingsThisMonth
 				}]
 			},
@@ -277,7 +285,7 @@ async function getTransactions(renderGraph = false, renderDoughnut = false, rend
 			data: {
 				labels: categoriesNegativeThisMonth,
 				datasets:  [{
-					label: 'Spending Categories This Month',
+					label: 'Spending This Month',
 					data: matchedNegativeSpendingsThisMonth
 				}]
 			},
@@ -320,47 +328,70 @@ settingsPageButton.addEventListener('click', function() {
 	window.location.href = '/settings.html';
 });
 
-renderGraphAsImageButton.addEventListener('click', async function() {
+let leftChartIsGraph = true;
+renderLeftChartAsImageButton.addEventListener('click', async function() {
 	const chartImageWidth=1920;
 	const chartImageHeight=1080;
 
-	console.log(datesOfSpendingsThisMonth);
-	console.log(spendingsThisMonth);
-
-	// render chart
-	let chartImageSrc = `/chart?width=${chartImageWidth}&height=${chartImageHeight}`;
-	chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
-	chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
-	chartImageSrc += `&username=${username}`;
-	chartImageSrc += `&timestamp=${new Date().getTime()}`;
-	window.open(`${chartImageSrc}`);
+	if(leftChartIsGraph)
+	{
+		// render chart
+		let chartImageSrc = `/graph?width=${chartImageWidth}&height=${chartImageHeight}`;
+		chartImageSrc += `&datesOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(datesOfSpendingsThisMonth))}`;
+		chartImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonth))}`;
+		chartImageSrc += `&username=${username}`;
+		chartImageSrc += `&timestamp=${new Date().getTime()}`;
+		window.open(`${chartImageSrc}`);
+	} else
+	{
+		// render bar
+		let chartImageSrc = `/bar?width=${chartImageWidth}&height=${chartImageHeight}`;
+		chartImageSrc += `&categoriesThisMonth=${encodeURIComponent(JSON.stringify(categoriesThisMonth))}`;
+		chartImageSrc += `&matchedSpendingsThisMonth=${encodeURIComponent(JSON.stringify(matchedSpendingsThisMonth))}`;
+		chartImageSrc += `&username=${username}`;
+		chartImageSrc += `&timestamp=${new Date().getTime()}`;
+		window.open(`${chartImageSrc}`);
+	}
 });
 
-renderDoughnutAsImageButton.addEventListener('click', async function() {
+let rightChartIsDoughnut = true;
+renderRightChartAsImageButton.addEventListener('click', async function() {
 	const chartImageWidth=1920;
 	const chartImageHeight=1080;
 
-	// render doughnut
-	let vendorsToSpendingsMap = {};
-	for(let x = 0; x < vendorsOfSpendingsThisMonth.length; x++) {
-		if(parseFloat(spendingsThisMonth[x]) >= 0) {
-			continue;
+	if(rightChartIsDoughnut)
+	{
+		// render doughnut
+		let vendorsToSpendingsMap = {};
+		for(let x = 0; x < vendorsOfSpendingsThisMonth.length; x++) {
+			if(parseFloat(spendingsThisMonth[x]) >= 0) {
+				continue;
+			}
+			vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] = (vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] || 0.0) + parseFloat(spendingsThisMonth[x]);
 		}
-		vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] = (vendorsToSpendingsMap[`${vendorsOfSpendingsThisMonth[x]}`] || 0.0) + parseFloat(spendingsThisMonth[x]);
-	}
-	vendorsOfSpendingsThisMonthCopy = [];
-	spendingsThisMonthCopy = [];
-	for(const key in vendorsToSpendingsMap) {
-		vendorsOfSpendingsThisMonthCopy.push(key + '\n' + vendorsToSpendingsMap[key].toFixed(2));
-		spendingsThisMonthCopy.push(String(vendorsToSpendingsMap[key]));
-	}
+		vendorsOfSpendingsThisMonthCopy = [];
+		spendingsThisMonthCopy = [];
+		for(const key in vendorsToSpendingsMap) {
+			vendorsOfSpendingsThisMonthCopy.push(key + '\n' + vendorsToSpendingsMap[key].toFixed(2));
+			spendingsThisMonthCopy.push(String(vendorsToSpendingsMap[key]));
+		}
 
-	let doughnutImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
-	doughnutImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonthCopy))}`;
-	doughnutImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonthCopy))}`;
-	doughnutImageSrc += `&username=${username}`;
-	doughnutImageSrc += `&timestamp=${new Date().getTime()}`;
-	window.open(`${doughnutImageSrc}`);
+		let doughnutImageSrc = `/doughnut?width=${chartImageWidth}&height=${chartImageHeight}`;
+		doughnutImageSrc += `&vendorsOfSpendingsThisMonth=${encodeURIComponent(JSON.stringify(vendorsOfSpendingsThisMonthCopy))}`;
+		doughnutImageSrc += `&spendingsThisMonth=${encodeURIComponent(JSON.stringify(spendingsThisMonthCopy))}`;
+		doughnutImageSrc += `&username=${username}`;
+		doughnutImageSrc += `&timestamp=${new Date().getTime()}`;
+		window.open(`${doughnutImageSrc}`);
+	} else
+	{
+		//render radar
+		let chartImageSrc = `/radar?width=${chartImageWidth}&height=${chartImageHeight}`;
+		chartImageSrc += `&categoriesNegativeThisMonth=${encodeURIComponent(JSON.stringify(categoriesNegativeThisMonth))}`;
+		chartImageSrc += `&matchedNegativeSpendingsThisMonth=${encodeURIComponent(JSON.stringify(matchedNegativeSpendingsThisMonth))}`;
+		chartImageSrc += `&username=${username}`;
+		chartImageSrc += `&timestamp=${new Date().getTime()}`;
+		window.open(`${chartImageSrc}`);
+	}
 });
 
 let alternateView = false;
@@ -368,9 +399,17 @@ alternateChartsButton.addEventListener('click', async function() {
 	alternateView = !alternateView;
 	if(alternateView)
 	{
+		leftChartIsGraph = false;
+		rightChartIsDoughnut = false;
+		renderLeftChartAsImageButton.innerText = 'Download Bar';
+		renderRightChartAsImageButton.innerText = 'Download Radar';
 		getTransactions(false, false, true, true);
 	} else
 	{
+		leftChartIsGraph = true;
+		rightChartIsDoughnut = true;
+		renderLeftChartAsImageButton.innerText = 'Download Graph';
+		renderRightChartAsImageButton.innerText = 'Download Doughnut';
 		getTransactions(true, true, false, false);
 	}
 });
