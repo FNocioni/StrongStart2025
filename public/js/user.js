@@ -4,18 +4,31 @@ var username = `${localStorage.getItem("user")}`;
 var user = document.getElementById("user");
 user.textContent = `Logged in as ${username}`;
 
-let userPageButton = document.getElementById("userPageButton");
-let loginPageButton = document.getElementById("loginPageButton");
-let registerPageButton = document.getElementById("registerPageButton");
-let settingsPageButton = document.getElementById("settingsPageButton");
-let renderGraphAsImageButton = document.getElementById("renderGraphAsImageButton");
-let renderDoughnutAsImageButton = document.getElementById("renderDoughnutAsImageButton");
-let spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
+const userPageButton = document.getElementById("userPageButton");
+const loginPageButton = document.getElementById("loginPageButton");
+const registerPageButton = document.getElementById("registerPageButton");
+const settingsPageButton = document.getElementById("settingsPageButton");
+const renderGraphAsImageButton = document.getElementById("renderGraphAsImageButton");
+const renderDoughnutAsImageButton = document.getElementById("renderDoughnutAsImageButton");
+const alternateChartsButton = document.getElementById("alternateChartsButton");
+const spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
-let spendingsThisMonth = [];
-let datesOfSpendingsThisMonth = [];
-let vendorsOfSpendingsThisMonth = [];
-async function getTransactions(renderGraph = false, renderDoughnut = false) {
+let spendingsThisMonth;
+let datesOfSpendingsThisMonth;
+let vendorsOfSpendingsThisMonth;
+let categoriesToSpendingsMap;
+let categoriesToNegativeSpendingsMap;
+let leftChart = document.getElementById('leftChart');
+let rightChart = document.getElementById('rightChart');
+let leftChartInstance;
+let rightChartInstance;
+async function getTransactions(renderGraph = false, renderDoughnut = false, renderBar = false, renderRadar = false) {
+	spendingsThisMonth = [];
+	datesOfSpendingsThisMonth = [];
+	vendorsOfSpendingsThisMonth = [];
+	categoriesToSpendingsMap = {};
+	categoriesToNegativeSpendingsMap = {};
+
 	const params = {
 		'username': username
 	}
@@ -51,6 +64,12 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 		const updated_at_date = updated_at.substring(0, updated_at.indexOf('T'));
 		const updated_at_time = updated_at.substring(updated_at.indexOf('T') + 1, updated_at.indexOf(".000Z"));
 
+		categoriesToSpendingsMap[`${category}`] = (categoriesToSpendingsMap[`${category}`] || 0) + parseFloat(amount);
+		if(parseFloat(amount) < 0)
+		{
+			categoriesToNegativeSpendingsMap[`${category}`] = (categoriesToSpendingsMap[`${category}`] || 0) + parseFloat(amount);
+		}
+
 		const spentDate = new Date(created_at_date);
 		if(spentDate.getFullYear() === today.getFullYear() && spentDate.getMonth === today.getMonth) {
 			spendingsThisMonth.push(amount);
@@ -72,12 +91,27 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 		innerHTMLStringBuffer += 		`</span>`;
 		innerHTMLStringBuffer += 	`</span>`;
 		innerHTMLStringBuffer += 	`<span class="transactionItemRow" id="transactionItemHiddenText_${x}" style="display: none;">`;
-		innerHTMLStringBuffer += 		`<span>${category}</span>`;
-		innerHTMLStringBuffer += 		`<span>${street_name}, ${city}, ${state_name}, ${postal_code}, ${country_name}</span>`;
+		innerHTMLStringBuffer += 		`<span style="font-weight: bold;">${category}</span>`;
+		innerHTMLStringBuffer += 		`<span style="font-size: 13px;">${street_name}, ${city}, ${state_name}, ${postal_code}, ${country_name}</span>`;
 		innerHTMLStringBuffer += 	`</span>`;
 		innerHTMLStringBuffer += `</p>`;
 	}
+
 	spendingsInfoDiv.innerHTML = innerHTMLStringBuffer;
+
+	let categoriesThisMonth = [];
+	let matchedSpendingsThisMonth = [];
+	for(const key in categoriesToSpendingsMap) {
+		categoriesThisMonth.push(key);
+		matchedSpendingsThisMonth.push(String(categoriesToSpendingsMap[key]));
+	}
+
+	let categoriesNegativeThisMonth = [];
+	let matchedNegativeSpendingsThisMonth = [];
+	for(const key in categoriesToNegativeSpendingsMap) {
+		categoriesNegativeThisMonth.push(key);
+		matchedNegativeSpendingsThisMonth.push(String(categoriesToNegativeSpendingsMap[key]));
+	}
 
 	for(let x = 0; x < responseData.data.length; x++) {
 		// as of Thursday, October 30, 2025, 17:57:10
@@ -101,10 +135,18 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 	let chartImageWidth = dashboardContentDiv.clientWidth * 0.586;
 	let chartImageHeight = dashboardContentDiv.clientHeight * 0.9;
 
+	if(leftChartInstance)
+	{
+		leftChartInstance.destroy();
+	}
+	if(rightChartInstance)
+	{
+		rightChartInstance.destroy();
+	}
+
 	if(renderGraph)
 	{
-		const graphChart = document.getElementById('graphChart');
-		new Chart(graphChart, {
+		leftChartInstance = new Chart(leftChart, {
 			type: 'line',
 			data: {
 				labels: datesOfSpendingsThisMonth,
@@ -178,14 +220,13 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 			spendingsThisMonthCopy.push(String(vendorsToSpendingsMap[key]));
 		}
 
-		const doughnutChart = document.getElementById('doughnutChart');
-		new Chart(doughnutChart, {
+		rightChartInstance = new Chart(rightChart, {
 			type: 'doughnut',
 			data: {
 				labels: vendorsOfSpendingsThisMonthCopy,
 				datasets: [{
 					label: 'Spendings This Month',
-					data: spendingsThisMonthCopy,
+					data: spendingsThisMonthCopy
 				}]
 			},
 			options: {
@@ -205,9 +246,55 @@ async function getTransactions(renderGraph = false, renderDoughnut = false) {
 			}
 		});
 	}
+
+	if(renderBar)
+	{
+		leftChartInstance = new Chart(leftChart, {
+			type: 'bar',
+			data: {
+				labels: categoriesThisMonth,
+				datasets:  [{
+					label: 'Spending Categories This Month',
+					data: matchedSpendingsThisMonth
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			},
+		});
+	}
+
+	if(renderRadar)
+	{
+		rightChartInstance = new Chart(rightChart, {
+			type: 'radar',
+			data: {
+				labels: categoriesNegativeThisMonth,
+				datasets:  [{
+					label: 'Spending Categories This Month',
+					data: matchedNegativeSpendingsThisMonth
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			},
+		});
+	}
 }
 
-getTransactions(true, true);
+getTransactions(true, true, false, false);
 
 userPageButton.addEventListener('click', function() {
 	window.location.href = '/user.html';
@@ -274,4 +361,16 @@ renderDoughnutAsImageButton.addEventListener('click', async function() {
 	doughnutImageSrc += `&username=${username}`;
 	doughnutImageSrc += `&timestamp=${new Date().getTime()}`;
 	window.open(`${doughnutImageSrc}`);
+});
+
+let alternateView = false;
+alternateChartsButton.addEventListener('click', async function() {
+	alternateView = !alternateView;
+	if(alternateView)
+	{
+		getTransactions(false, false, true, true);
+	} else
+	{
+		getTransactions(true, true, false, false);
+	}
 });
