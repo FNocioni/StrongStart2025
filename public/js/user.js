@@ -13,6 +13,30 @@ const renderRightChartAsImageButton = document.getElementById("renderRightChartA
 const alternateChartsButton = document.getElementById("alternateChartsButton");
 const spendingsInfoDiv = document.getElementById("spendingsInfoDiv");
 
+userPageButton.addEventListener('click', function() {
+	window.location.href = '/user.html';
+});
+
+loginPageButton.addEventListener('click', function() {
+	if(confirm("Are You Sure You Want To Go Back To The Login Page?"))
+	{
+		window.location.href = '/login.html';
+	}
+	loginPageButton.classList.remove('button-active');
+});
+
+registerPageButton.addEventListener('click', function() {
+	if(confirm("Are You Sure You Want To Go Back To The Register Page?"))
+	{
+		window.location.href = '/register.html';
+	}
+	registerPageButton.classList.remove('button-active');
+});
+
+settingsPageButton.addEventListener('click', function() {
+	window.location.href = '/settings.html';
+});
+
 let spendingsThisMonth;
 let datesOfSpendingsThisMonth;
 let vendorsOfSpendingsThisMonth;
@@ -26,6 +50,7 @@ let leftChart = document.getElementById('leftChart');
 let rightChart = document.getElementById('rightChart');
 let leftChartInstance;
 let rightChartInstance;
+
 async function getTransactions(renderGraph = false, renderDoughnut = false, renderBar = false, renderRadar = false) {
 	spendingsThisMonth = [];
 	datesOfSpendingsThisMonth = [];
