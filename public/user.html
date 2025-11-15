@@ -18,8 +18,6 @@
             <div class="nav-wrapper">
             <a id="user" class="brand-logo"></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <button id="renderGraphAsImageButton" class="redirectButton">Download Graph</button>
-                <button id="renderDoughnutAsImageButton" class="redirectButton">Download Doughnut</button>
                 <button id="userPageButton" class="redirectButton">Dashboard</button>
                 <button id="loginPageButton" class="redirectButton">Login</button>
                 <button id="registerPageButton" class="redirectButton">Register</button>
@@ -38,15 +36,23 @@
 					</p>
 				</div>
 			</div>
-			<div id="graphChartDiv">
-				<!--image will be rendered by user.js-->
-				<!--chart will be rendered by user.js-->
-				<canvas id="graphChart"></canvas>
-			</div>
-			<div id="doughnutChartDiv">
-				<!--image will be rendered by user.js-->
-				<!--chart will be rendered by user.js-->
-				<canvas id="doughnutChart"></canvas>
+			<div id="chartjsDiv">
+				<div id="chartjsDivRow">
+					<!--this specific chratjsDivRow will be updated/modified by user.js-->
+					<button id="renderLeftChartAsImageButton" class="chartjsOptionsButton">Download Graph</button>
+					<button id="alternateChartsButton" class="chartjsOptionsButton">Alternate View</button>
+					<button id="renderRightChartAsImageButton" class="chartjsOptionsButton">Download Doughnut</button>
+				</div>
+				<div id="chartjsDivRow">
+					<div id="leftChartDiv">
+						<!--chart will be rendered by user.js-->
+						<canvas id="leftChart"></canvas>
+					</div>
+					<div id="rightChartDiv">
+						<!--chart will be rendered by user.js-->
+						<canvas id="rightChart"></canvas>
+					</div>
+				</div>
 			</div>
 		</div>
 

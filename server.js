@@ -76,7 +76,7 @@ app.post('/transactions', async (req, res) => {
 
     try {
         //Check that the user's user_id exists in transactions db
-        const [rows] = await pool.query('SELECT * FROM transactions WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
+        const [rows] = await pool.query('SELECT amount, city, country_name, transactions.created_at, postal_code, state_name, street_name, transaction_id, transactions.updated_at, vendor_name, category FROM transactions JOIN vendors ON transactions.vendor_id = vendors.vendor_id WHERE user_id = (SELECT id FROM users WHERE username = ?)', [username]);
         if(rows.length === 0) {
             return res.status(400).json({success: false, error: 'User Has No Existing Transactions!'});
         }
@@ -87,9 +87,9 @@ app.post('/transactions', async (req, res) => {
     }
 });
 
-app.get('/chart', async (req, res) => {
-	console.log("Received GET Request (chart)");
-	console.log("rendering chart...");
+app.get('/graph', async (req, res) => {
+	console.log("Received GET Request (graph)");
+	console.log("rendering graph...");
 
 	const today = new Date();
 	const daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
@@ -107,7 +107,7 @@ app.get('/chart', async (req, res) => {
 
 	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 	const ChartDataLabels = require('chartjs-plugin-datalabels');
-	const { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
+	const { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Colors } = require('chart.js');
 
 	Chart.register(
 		LineController,
@@ -117,7 +117,7 @@ app.get('/chart', async (req, res) => {
 		LinearScale,
 		Tooltip,
 		Legend,
-		ChartDataLabels
+		Colors,
 	);
 
 	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
@@ -179,13 +179,13 @@ app.get('/chart', async (req, res) => {
 		};
 
 		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-		console.log("done rendering chart!");
+		console.log("done rendering graph!");
 
 		res.set('Content-Type', 'image/png');
 		res.send(image);
 	} catch(err) {
 		console.error(err);
-		res.status(500).send('Error generating chart');
+		res.status(500).send('Error generating graph');
 	}
 });
 
@@ -200,7 +200,7 @@ app.get('/doughnut', async (req, res) => {
 	const username = req.query.username;
 
 	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-	const { Chart, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } = require('chart.js');
+	const { Chart, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Colors } = require('chart.js');
 
 	Chart.register(
 		DoughnutController,
@@ -212,6 +212,7 @@ app.get('/doughnut', async (req, res) => {
 		LinearScale,
 		Tooltip,
 		Legend,
+		Colors
 	);
 
 	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
@@ -248,6 +249,124 @@ app.get('/doughnut', async (req, res) => {
 	} catch(err) {
 		console.error(err);
 		res.status(500).send('Error generating doughnut');
+	}
+});
+
+app.get('/bar', async (req, res) => {
+	console.log("Received GET Request (bar)");
+	console.log("rendering bar...");
+
+	const width = parseInt(req.query.width) || 800;
+	const height = parseInt(req.query.height) || 600;
+	const categoriesThisMonth = JSON.parse(req.query.categoriesThisMonth);
+	const matchedSpendingsThisMonth = JSON.parse(req.query.matchedSpendingsThisMonth);
+	const username = req.query.username;
+
+	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+	const { Chart, BarController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Colors } = require('chart.js');
+
+	Chart.register(
+		BarController,
+		ArcElement,
+		LineController,
+		LineElement,
+		PointElement,
+		CategoryScale,
+		LinearScale,
+		Tooltip,
+		Legend,
+		Colors
+	);
+
+	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+	try {
+		const configuration = {
+			type: 'bar',
+			data: {
+				labels: categoriesThisMonth,
+				datasets:  [{
+					label: 'Spending Categories This Month',
+					data: matchedSpendingsThisMonth
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			},
+		}
+
+		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+		console.log("done rendering bar!");
+
+		res.set('Content-Type', 'image/png');
+		res.send(image);
+	} catch(err) {
+		console.error(err);
+		res.status(500).send('Error generating bar');
+	}
+});
+
+app.get('/radar', async (req, res) => {
+	console.log("Received GET Request (radar)");
+	console.log("rendering radar...");
+
+	const width = parseInt(req.query.width) || 800;
+	const height = parseInt(req.query.height) || 600;
+	const categoriesNegativeThisMonth = JSON.parse(req.query.categoriesNegativeThisMonth);
+	const matchedNegativeSpendingsThisMonth = JSON.parse(req.query.matchedNegativeSpendingsThisMonth);
+	const username = req.query.username;
+
+	const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+	const { Chart, RadarController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, Colors } = require('chart.js');
+
+	Chart.register(
+		RadarController,
+		ArcElement,
+		LineController,
+		LineElement,
+		PointElement,
+		CategoryScale,
+		LinearScale,
+		Tooltip,
+		Legend,
+		Colors
+	);
+
+	let chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+	try {
+		const configuration = {
+			type: 'radar',
+			data: {
+				labels: categoriesNegativeThisMonth,
+				datasets:  [{
+					label: 'Spending Categories This Month',
+					data: matchedNegativeSpendingsThisMonth
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			},
+		}
+
+		const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+		console.log("done rendering radar!");
+
+		res.set('Content-Type', 'image/png');
+		res.send(image);
+	} catch(err) {
+		console.error(err);
+		res.status(500).send('Error generating radar');
 	}
 });
 
